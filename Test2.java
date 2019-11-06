@@ -13,6 +13,9 @@ public class Test2 {
       frame.setLocationRelativeTo(null);
       frame.setVisible(true);
       
+      System.out.println();
+      System.out.println();
+      System.out.println();
       
    }
    

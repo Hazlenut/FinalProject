@@ -7,5 +7,10 @@ public class Test {
 	int c;
 	String d,e,f,g;
 	System.out.println();
+   
+   System.out.println();
+   System.out.println();
+   System.out.println();
+   
 }
 }
