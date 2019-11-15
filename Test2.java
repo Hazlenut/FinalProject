@@ -12,6 +12,10 @@ public class Test2 {
       frame.pack();
       frame.setLocationRelativeTo(null);
       frame.setVisible(true);
+      
+      System.out.println();
+      System.out.println();
+      System.out.println();
    }
    
 }
