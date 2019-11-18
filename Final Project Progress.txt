@@ -1,0 +1,7 @@
+- added Events.java which is designed to get movie times off a specified movie theater website
+
+- added Movie.java to store the movie data
+
+- added Main.java that contains JavaFX GUI code
+
+- Test.java is temporary
