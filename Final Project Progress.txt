@@ -1,0 +1,9 @@
+We are building a JavaFX application that can get movie times, concert times, sport event times, and more from the internet and store them in the application. The user can then use the application to orgnaize these events.
+
+- added Events.java which is designed to get movie times off a specified movie theater website
+
+- added Movie.java to store the movie data
+
+- added Main.java that contains JavaFX GUI code
+
+- Test.java is temporary
