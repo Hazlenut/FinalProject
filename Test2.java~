@@ -3,8 +3,8 @@ import javax.swing.*;
 
 public class Test2 {
    
-   public static void main(String[] arg) {
-      
+   public static void main(String[] arg) 
+   {   
       JFrame frame = new JFrame("JFrame");
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -12,8 +12,14 @@ public class Test2 {
       frame.pack();
       frame.setLocationRelativeTo(null);
       frame.setVisible(true);
+<<<<<<< HEAD
+=======
       
+      System.out.println();
+      System.out.println();
+      System.out.println();
       
+>>>>>>> 01bebdc9a1c4f250aa4e2a5c6eb8997556062dad
    }
    
 }
