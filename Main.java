@@ -1,6 +1,6 @@
-package sample;
-
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -10,11 +10,12 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage){
 
         primaryStage.setTitle("Event Organizer");
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -36,9 +37,20 @@ public class Main extends Application {
             System.out.println("Button 2 Pressed");
             //Code here...
         });
+        
         ButtonBar buttonBar = new ButtonBar();
         buttonBar.getButtons().add(button1);
         buttonBar.getButtons().add(button2);
+        SetEvents mv = new SetEvents();
+        TextField zip = new TextField("Enter Zipcode");
+        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
+            public void handle(ActionEvent e) 
+            { 
+                l.setText(b.getText()); 
+            } 
+        }; 
+        
+        ArrayList<Button> buttons = mv.getMovies();
         pane.setBottom(buttonBar);
         primaryStage.setScene(scene);
         primaryStage.show();
