@@ -1,4 +1,3 @@
-package engine;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -42,21 +41,22 @@ public class Event {
                         elements.remove(elements.size()-1);
                     }
                     for(Element e : elements) {
-                        events.add(new Event(e.ownText(), new Date())); //Fix Date system / code for other types besides movies
+                        events.add(new Event(e.ownText(), new Date(), link.getType())); //Fix Date system / code for other types besides movies
                     }
                     break;
                 case CONCERT:
                     for(Element e : elements) {
-                        events.add(new Event(e.ownText(), new Date()));
+                        events.add(new Event(e.ownText(), new Date(), link.getType()));
                     }
+                    break;
                 case SPORT:
                     for(Element e : elements) {
-                        events.add(new Event(e.ownText(), new Date()));
+                        events.add(new Event(e.ownText(), new Date(), link.getType()));
                     }
                     break;
                 case OTHER:
                     for(Element e : elements) {
-                        events.add(new Event(e.ownText(), new Date()));
+                        events.add(new Event(e.ownText(), new Date(), link.getType()));
                     }
             }
         }
@@ -111,11 +111,13 @@ public class Event {
 
     private String name;
     private Date date;
+    private EventType type;
 
-    public Event(String name, Date date) {
+    public Event(String name, Date date, EventType type) {
 
         this.name = name;
         this.date = date;
+        this.type = type;
 
     }
 
@@ -140,11 +142,16 @@ public class Event {
         this.date = date;
 
     }
+    
+    public EventType getType() {
+    	return type;
+    }
+    
 
     @Override
     public String toString() {
 
-        return "Event: " + name + " on " + date;
+        return getType() + " Event: " + name + " on " + date;
     }
 
 }

@@ -1,4 +1,4 @@
-package engine;
+
 
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class Main extends Application {
     
-    private String directory;
+    private static String directory;
     
     public static void main(String[] args) {
         
@@ -39,13 +39,14 @@ public class Main extends Application {
     public static void exitOperations() {
         
         Attributes.save();
+        //primaryStage.close();
         //Save EventLibrary...
         
     }
     
-    public String getDirectory() {
+    public static String getDirectory() {
         
-        return directory();
+        return directory;
     }
     
 }

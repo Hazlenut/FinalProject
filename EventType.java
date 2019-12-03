@@ -1,4 +1,3 @@
-package engine;
 
 public enum EventType {
 
