@@ -49,7 +49,4 @@ public class Movie {
 		this.showtimes = showtimes;
 	}
 	
-	
-	
-	
 }

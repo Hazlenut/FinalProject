@@ -7,3 +7,25 @@ We are building a JavaFX application that can get movie times, concert times, sp
 - added Main.java that contains JavaFX GUI code
 
 - Test.java is temporary
+
+12/3/2019:
+
+- Added the Attributes class to load / save attributes & settings of the program, like the title and whether or not events have already been loaded in
+
+- Added the Event class which both stores event data and collects the data from the web using the jsoup API
+
+- Added the EventLibrary class which stores all events and provides methods for accessing certain subsets of the events (like a List<Event> which only contains movies, etc.)
+
+- Added the EventType enum which is used to label an event object as a particular type - MOVIE, CONCERT, etc.
+
+- Added the abstract View class which serves as the common class holding together the hierarchy of View objects like EventView, SearchView, etc., that form the main GUI system
+
+- Added the EventView class, a View object that is used to store a list of Events and display them in an adjacent GridPane display
+
+- Added the SearchView class, a View object which has a web browser that can be used to search the internet and add events to the EventLibrary
+
+- Added the SettingsView class, a View object which is used to display / alter user settings
+
+- Added the Screen class which loads up the JavaFX GUI and holds all of the individual View instances added to it as well as the the ButtonBar toolbar
+
+- Modified the code within Main.java to fit the new classes which have been added
