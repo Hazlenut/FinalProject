@@ -1,3 +1,4 @@
+package engine;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -41,22 +42,22 @@ public class Event {
                         elements.remove(elements.size()-1);
                     }
                     for(Element e : elements) {
-                        events.add(new Event(e.ownText(), new Date(), link.getType())); //Fix Date system / code for other types besides movies
+                        events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0)); //Fix Date system / code for other types besides movies
                     }
                     break;
                 case CONCERT:
                     for(Element e : elements) {
-                        events.add(new Event(e.ownText(), new Date(), link.getType()));
+                        events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0));
                     }
                     break;
                 case SPORT:
                     for(Element e : elements) {
-                        events.add(new Event(e.ownText(), new Date(), link.getType()));
+                        events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0));
                     }
                     break;
                 case OTHER:
                     for(Element e : elements) {
-                        events.add(new Event(e.ownText(), new Date(), link.getType()));
+                        events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0));
                     }
             }
         }
@@ -112,16 +113,55 @@ public class Event {
     private String name;
     private Date date;
     private EventType type;
+    private int likes;
+    private int dislikes;
+    private int people;
+    private double clout;
 
-    public Event(String name, Date date, EventType type) {
+    public Event(String name, Date date, EventType type, int likes, int dislikes, int people) {
 
         this.name = name;
         this.date = date;
         this.type = type;
+        this.likes = likes;
+        this.dislikes = dislikes;
+        this.people = people;
+        //replace 10 with age of event
+        this.clout = ((likes * 2) + (dislikes*-1.5)/10);
+        
 
     }
+    public double getClout() {
+    	return clout;
+    }
+    public void setClout(double clout) {
+    	this.clout= clout;
+    }
+    public int getLikes() {
+		return likes;
+	}
+    
+    public int getPeople() {
+    	return people;
+    }
+    
+    public void setPeople(int people) {
+    	this.people = people;
+    }
 
-    public String getName() {
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public int getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
+	}
+
+	public String getName() {
 
         return name;
     }
