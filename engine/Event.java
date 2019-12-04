@@ -12,10 +12,12 @@ import java.util.LinkedList;
 public class Event {
 
     private static LinkedList<Link> searchQueue;
+    private static ArrayList<Link> activeLinks;
 
     static{
 
         searchQueue = new LinkedList<>();
+        activeLinks = new ArrayList<>();
 
     }
 
@@ -60,27 +62,30 @@ public class Event {
                         events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0));
                     }
             }
+            activeLinks.add(link);
         }
 
 		return events;
 	}
 
-	public static void addLink(String link, EventType type) {
+	public static boolean addLink(String link, EventType type) {
 
         Link l = new Link(link, type);
-        if(!searchQueue.contains(l)) {
+        if(!searchQueue.contains(l) && !activeLinks.contains(l)) {
             searchQueue.add(l);
+            return true;
+        }else{
+            return false;
         }
 
     }
 
-    public static void addLink(String link) {
+    public static boolean addLink(String link) {
 
-        addLink(link, EventType.OTHER);
-
+        return addLink(link, EventType.OTHER);
     }
 
-    private static class Link {
+    public static class Link {
 
         private String link;
         private EventType type;
@@ -186,7 +191,6 @@ public class Event {
     public EventType getType() {
     	return type;
     }
-    
 
     @Override
     public String toString() {

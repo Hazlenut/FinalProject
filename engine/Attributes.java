@@ -1,6 +1,5 @@
 package engine;
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -8,7 +7,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Scanner;
-import java.util.Set;
 
 public final class Attributes {
     
@@ -25,7 +23,7 @@ public final class Attributes {
         directory = Main.getDirectory();
         stateChanged = false;
         attributes = new HashMap<>();
-        try(Scanner input = new Scanner(new File(directory + "\\attributes.txt"))) {
+        try(Scanner input = new Scanner(new File(directory + "attributes.txt"))) {
             while(input.hasNext()) {
                 String next = input.nextLine();
                 attributes.put(next.substring(0, next.indexOf('=')), next.substring(next.indexOf('=') + 1, next.length()));
@@ -44,7 +42,7 @@ public final class Attributes {
         defaultValues.offer("Title=Event Organizer");
         defaultValues.offer("Previously Loaded=No");
 
-        try(FileWriter writer = new FileWriter(new File(directory + "\\attributes.txt"))) {
+        try(FileWriter writer = new FileWriter(new File(directory + "attributes.txt"))) {
             while(!defaultValues.isEmpty()) {
                 String string = defaultValues.remove();
                 writer.write(string);
@@ -69,7 +67,7 @@ public final class Attributes {
             for(String key : attributes.keySet()) {
                 defaultValues.add(key + "=" + attributes.get(key));
             }
-            try(FileWriter fileWriter = new FileWriter(new File(directory + "\\attributes.txt"))) {
+            try(FileWriter fileWriter = new FileWriter(new File(directory + "attributes.txt"))) {
                 while(!defaultValues.isEmpty()) {
                     fileWriter.write(defaultValues.remove());
                     if(!defaultValues.isEmpty()) {
@@ -79,11 +77,6 @@ public final class Attributes {
             }catch(IOException e) {}
         }
 
-    }
-
-    public static Set<String> getAllTypes() {
-
-        return attributes.keySet();
     }
 
     public static String getAttribute(String type) {

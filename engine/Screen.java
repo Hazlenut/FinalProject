@@ -1,12 +1,13 @@
 package engine;
 
-
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.web.WebHistory;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -17,85 +18,138 @@ public final class Screen {
     private Scene scene;
     private BorderPane anchor;
     private ButtonBar toolBar;
-    private ArrayList<View> viewPanes;
+    private ArrayList<View> views;
+    private int currentViewIndex;
 
-    private static final int SEARCH_VIEW = 0;
-    private static final int EVENT_CALENDAR = 1;
-    private static final int SETTINGS = 2;
+    public static final int SEARCH_VIEW = 0;
+    public static final int EVENT_VIEW = 1;
+    public static final int SETTINGS_VIEW = 2;
+    private static final int VIEW_COUNT = 3;
 
-    public Screen(Dimension size) {
+    public Screen(Dimension size, int view) {
+
+        if(view < 0 || view >= VIEW_COUNT) {
+            view = 0;
+        }
 
         anchor = new BorderPane();
         toolBar = new ButtonBar();
-        initializeViews();
-        anchor.setCenter(viewPanes.get(SEARCH_VIEW).getBorderPane());
+        initializeViews(size);
+        anchor.setCenter(views.get(view).getBorderPane());
+        toolBar.getButtons().addAll(views.get(view).getToolBarButtons());
+        currentViewIndex = view;
         anchor.setTop(toolBar);
         scene = new Scene(anchor, size.getWidth(), size.getHeight());
         scene.setOnKeyPressed(this::keyListener);
+        ((SearchView)views.get(SEARCH_VIEW)).getHistory().addListener((ListChangeListener<WebHistory.Entry>) c -> ((SettingsView)views.get(SETTINGS_VIEW)).updateHistoryList(getSearchViewHistory()));
 
     }
 
-    private void initializeViews() {
+    private void initializeViews(Dimension size) {
 
-        viewPanes = new ArrayList<>();
+        views = new ArrayList<>();
 
         String name = "Search View";
-        viewPanes.add(new SearchView(name));
+        views.add(new SearchView(name, this));
         Button button = new Button(name);
         button.setOnAction(event -> switchView(SEARCH_VIEW));
         toolBar.getButtons().add(button);
-        name = "Event Calendar";
+        name = "Event View";
         button = new Button(name);
-        viewPanes.add(new EventView(name));
-        button.setOnAction(event -> switchView(EVENT_CALENDAR));
+        views.add(new EventView(name,this, size));
+        button.setOnAction(event -> switchView(EVENT_VIEW));
         toolBar.getButtons().add(button);
         name = "Settings";
         button = new Button(name);
-        viewPanes.add(new SettingsView(name));
-        button.setOnAction(event -> switchView(SETTINGS));
+        views.add(new SettingsView(name, this));
+        button.setOnAction(event -> switchView(SETTINGS_VIEW));
         toolBar.getButtons().add(button);
 
     }
 
     private void switchView(int viewIndex) {
 
-        anchor.setCenter(viewPanes.get(viewIndex).getBorderPane());
+        toolBar.getButtons().removeAll(views.get(currentViewIndex).getToolBarButtons());
+        anchor.setCenter(views.get(viewIndex).getBorderPane());
+        toolBar.getButtons().addAll(views.get(viewIndex).getToolBarButtons());
+        currentViewIndex = viewIndex;
+        updateEventViews();
 
+    }
+
+    private Stage getStage() {
+
+        return (Stage)scene.getWindow();
     }
 
     private void keyListener(KeyEvent keyEvent) {
 
-        Stage stage = (Stage)scene.getWindow();
-
         switch(keyEvent.getCode()) {
             case F1:
-                Main.exitOperations();
+                Main.saveOperations();
                 Platform.exit();
                 break;
-            case F4:
-                ((SearchView)viewPanes.get(SEARCH_VIEW)).goToHome();
-                break;
             case F5:
-                Event.addLink(((SearchView)viewPanes.get(SEARCH_VIEW)).getCurrentURL());
-                EventLibrary.updateEvents();
-                ((EventView)viewPanes.get(EVENT_CALENDAR)).matchListToEventLibrary();
+                getEventsFromSearchView();
+                break;
+            case F8:
+                if(getStage().isFullScreen()) {
+                    getStage().setFullScreen(false);
+                }
+                Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+                getStage().setWidth(0.25 * size.getWidth());
+                getStage().setHeight(0.34 * size.getHeight());
+                getStage().centerOnScreen();
                 break;
             case F9:
                 switchView(SEARCH_VIEW);
                 break;
             case F10:
-                switchView(EVENT_CALENDAR);
+                switchView(EVENT_VIEW);
                 break;
             case F11:
-                if(stage.isFullScreen()) {
-                    stage.setFullScreen(false);
+                if(getStage().isFullScreen()) {
+                    getStage().setFullScreen(false);
                 }else{
-                    stage.setFullScreen(true);
+                    getStage().setFullScreen(true);
                 }
                 break;
             case F12:
-                stage.setIconified(true);
+                getStage().setIconified(true);
                 break;
+            default:
+                views.get(currentViewIndex).keyListener(keyEvent);
+                break;
+        }
+        updateEventViews();
+
+    }
+
+    public ArrayList<String> getSearchViewHistory() {
+
+        ArrayList<String> list = new ArrayList<>();
+        for(WebHistory.Entry entry : ((SearchView)views.get(SEARCH_VIEW)).getHistory()) {
+            list.add(entry.getUrl());
+        }
+
+        return list;
+    }
+
+    public void getEventsFromSearchView() {
+
+        if(Event.addLink(((SearchView)views.get(SEARCH_VIEW)).getCurrentURL())){
+            EventLibrary.updateEvents();
+            ((EventView) views.get(EVENT_VIEW)).matchListToEventLibrary();
+        }
+
+    }
+
+    public void updateEventViews() {
+
+        for(View view : views) {
+            if(view instanceof EventView) {
+                ((EventView)view).update(new Dimension((int)scene.getWidth(), (int)scene.getHeight()));
+            }
         }
 
     }

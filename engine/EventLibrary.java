@@ -1,6 +1,5 @@
 package engine;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -43,8 +42,6 @@ public final class EventLibrary {
 
         //IMPLEMENT, using state.txt file...
 
-        System.out.println("Loading saved events...");
-
         //(if the loading of previous events fails...)
         loadDefaultLinks();
 
@@ -76,11 +73,11 @@ public final class EventLibrary {
     }
 
 }
-    
+
     //Add this method to get Movie Events based off a geographic location:
-    
+
     /*
-    
+
     public static ArrayList<Movie> getMovies(int zipCode, int numShows) throws IOException {
 
         Elements div = document.select("PerformerCard__Details__name");

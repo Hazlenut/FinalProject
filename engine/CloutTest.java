@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class CloutTest {
 
-	public static void main(String[] args) {
+	public static void cloutTest() {
 		
 		/* 
 		 * Clout = (Likes+Dislikes)/Time
@@ -14,19 +14,19 @@ public class CloutTest {
 		 * Maybe
 		 * add a concave down and decreasing curve to base points off of
 		 */
-		Scanner sc = new Scanner(System.in);
+		Scanner input = new Scanner(System.in);
 		double likes = 2;
 		double dislikes = -1;
 		double total = 0;
 		double time = 12; //hours
 		double cloutFactor = 5;
-		int n = sc.nextInt();
-		sc.nextLine();
+		int n = input.nextInt();
+		input.nextLine();
 		for(int i = 0; i < n; i++) {
-			String a = sc.nextLine();
+			String a = input.nextLine();
 			if(a.equals("a")) {
 				total+=likes;
-			}else if(a.equals("a")) {
+			}else if(a.equals("b")) {
 				total+=dislikes;
 			}
 		}
@@ -34,6 +34,7 @@ public class CloutTest {
 			double clout = total*cloutFactor/(i);
 			System.out.println("time: " + i + " " + clout);
 		}
+
 	}
 
 }
