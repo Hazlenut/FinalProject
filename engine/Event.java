@@ -126,7 +126,26 @@ public class Event {
     private double points;
     private int popularity;
     private int time;
+    private User user;
+    public Event(String name, Date date, EventType type, int likes, int dislikes, int people, User user) {
 
+        this.name = name;
+        this.date = date;
+        this.type = type;
+        this.likes = likes;
+        this.dislikes = dislikes;
+        this.people = people;
+        this.time = getTime();
+        //replace 10 with age of event
+        if(likes*2 <= dislikes*1.5) {
+        	this.points = 0;
+        }else {
+        	this.points = ((likes * 2) + (dislikes*-1.5) + -0.05*(Math.pow(time, 2)));
+        }
+        this.user = user;
+        
+
+    }
     public Event(String name, Date date, EventType type, int likes, int dislikes, int people) {
 
         this.name = name;
@@ -179,9 +198,18 @@ public class Event {
     }
     
     public int getDisplayedPoints() {
-    	return likes - (dislikes/2);
+    	return (2 * likes) - dislikes;
     }
     
+    public void addPoint() {
+    	user.addPoints();
+    	user.addPoints();
+    	this.points++;
+    }
+    public void removePoint() {
+    	user.removePoints();
+    	this.points--;
+    }
     public int getTime() {
     	setTime();
     	return time;

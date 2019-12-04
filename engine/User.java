@@ -6,6 +6,8 @@ public class User {
 	// if you want to make a continue as guest option
 	private boolean isGuest;
 	private int factor;
+	private int points;
+	
 	public User() {
 		isGuest = true;
 	}
@@ -45,6 +47,17 @@ public class User {
 		this.factor = factor;
 	}
 	
-	
+	public int getPoints() {
+		return points;
+	}
+	public void setPoints(int points) {
+		this.points = points;
+	}
+	public void addPoints() {
+		this.points++;
+	}
+	public void removePoints() {
+		this.points--;
+	}
 	
 }
