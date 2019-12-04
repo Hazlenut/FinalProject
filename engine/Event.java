@@ -5,6 +5,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -121,7 +123,9 @@ public class Event {
     private int likes;
     private int dislikes;
     private int people;
-    private double clout;
+    private double points;
+    private int popularity;
+    private int time;
 
     public Event(String name, Date date, EventType type, int likes, int dislikes, int people) {
 
@@ -131,44 +135,87 @@ public class Event {
         this.likes = likes;
         this.dislikes = dislikes;
         this.people = people;
+        this.time = getTime();
         //replace 10 with age of event
-        this.clout = ((likes * 2) + (dislikes*-1.5)/10);
+        if(likes*2 <= dislikes*1.5) {
+        	this.points = 0;
+        }else {
+        	this.points = ((likes * 2) + (dislikes*-1.5) + -0.05*(Math.pow(10, time)));
+        }
+        
         
 
     }
-    public double getClout() {
-    	return clout;
+    public int getPopularity() {
+    	
+    	return popularity;
+    	
     }
-    public void setClout(double clout) {
-    	this.clout= clout;
+    public void setPopularity() {
+    	
+    	popularity = Integer.parseInt((Integer.toString((likes+dislikes)/100)));
+    	
+    }
+    public double getPoints() {
+    	
+    	return points;
+    	
+    }
+    public void setPoints(double points) {
+    	
+    	this.points = points;
+    	
     }
     public int getLikes() {
+    	
 		return likes;
+		
 	}
     
     public int getPeople() {
+    	
     	return people;
+    	
     }
     
+    public int getTime() {
+    	setTime();
+    	return time;
+    }
+    
+    public void setTime() {
+    	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    	Date a = new Date();
+    	time = a.getHours();
+    }
     public void setPeople(int people) {
+    	
     	this.people = people;
+    	
     }
 
 	public void setLikes(int likes) {
+		
 		this.likes = likes;
+		
 	}
 
 	public int getDislikes() {
+		
 		return dislikes;
+		
 	}
 
 	public void setDislikes(int dislikes) {
+		
 		this.dislikes = dislikes;
+		
 	}
 
 	public String getName() {
 
         return name;
+        
     }
 
     public void setName(String name) {
@@ -180,6 +227,7 @@ public class Event {
     public Date getDate() {
 
         return date;
+        
     }
 
     public void setDate(Date date) {
@@ -189,13 +237,16 @@ public class Event {
     }
     
     public EventType getType() {
+    	
     	return type;
+    	
     }
 
     @Override
     public String toString() {
 
         return getType() + " Event: " + name + " on " + date;
+        
     }
 
 }

@@ -25,6 +25,7 @@ public final class Screen {
     public static final int EVENT_VIEW = 1;
     public static final int SETTINGS_VIEW = 2;
     private static final int VIEW_COUNT = 3;
+    //public static final int HOME_VIEW = 3;
 
     public Screen(Dimension size, int view) {
 
@@ -49,12 +50,12 @@ public final class Screen {
 
         views = new ArrayList<>();
 
-        String name = "Search View";
+        String name = "Event Search";
         views.add(new SearchView(name, this));
         Button button = new Button(name);
         button.setOnAction(event -> switchView(SEARCH_VIEW));
         toolBar.getButtons().add(button);
-        name = "Event View";
+        name = "All Events";
         button = new Button(name);
         views.add(new EventView(name,this, size));
         button.setOnAction(event -> switchView(EVENT_VIEW));
@@ -64,7 +65,11 @@ public final class Screen {
         views.add(new SettingsView(name, this));
         button.setOnAction(event -> switchView(SETTINGS_VIEW));
         toolBar.getButtons().add(button);
-
+       /* name = "Home";
+        views.add(new HomeView(name, this));
+        button.setOnAction(event -> switchView(HOME_VIEW));
+        toolBar.getButtons().add(button);
+        */
     }
 
     private void switchView(int viewIndex) {
@@ -89,6 +94,9 @@ public final class Screen {
                 Main.saveOperations();
                 Platform.exit();
                 break;
+      /*      case F2:
+            	switchView(HOME_VIEW);
+            	break;*/
             case F5:
                 getEventsFromSearchView();
                 break;

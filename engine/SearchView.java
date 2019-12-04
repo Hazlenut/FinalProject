@@ -29,7 +29,7 @@ public class SearchView extends View {
         button1.setOnAction(event -> previousPage());
         Button button2 = new Button("Next");
         button2.setOnAction(event -> nextPage());
-        Button button3 = new Button("Home");
+        Button button3 = new Button("Google");
         button3.setOnAction(event -> goToHome());
         Button button4 = new Button("Get Events");
         button4.setOnAction(event -> getScreen().getEventsFromSearchView());
