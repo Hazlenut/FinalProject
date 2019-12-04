@@ -140,7 +140,7 @@ public class Event {
         if(likes*2 <= dislikes*1.5) {
         	this.points = 0;
         }else {
-        	this.points = ((likes * 2) + (dislikes*-1.5) + -0.05*(Math.pow(10, time)));
+        	this.points = ((likes * 2) + (dislikes*-1.5) + -0.05*(Math.pow(time, 2)));
         }
         
         
@@ -176,6 +176,10 @@ public class Event {
     	
     	return people;
     	
+    }
+    
+    public int getDisplayedPoints() {
+    	return likes - (dislikes/2);
     }
     
     public int getTime() {
