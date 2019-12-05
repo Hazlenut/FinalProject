@@ -77,7 +77,18 @@ public class SettingsView extends View {
     }
 
     @Override
-    public void keyListener(KeyEvent keyEvent) {
+    public void keyReleaseListener(KeyEvent keyEvent) {
+
+        switch(keyEvent.getCode()) {
+
+            //Code...
+
+        }
+
+    }
+
+    @Override
+    public void keyPressListener(KeyEvent keyEvent) {
 
         switch(keyEvent.getCode()) {
 

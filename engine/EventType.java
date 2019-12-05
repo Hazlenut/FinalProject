@@ -20,6 +20,21 @@ public enum EventType {
 
     }
 
+    public static EventType getEventType(int index) {
+
+        switch(index) {
+            case 0:
+                return MOVIE;
+            case 1:
+                return CONCERT;
+            case 2:
+                return SPORT;
+            default:
+                return OTHER;
+        }
+
+    }
+
     public static EventType getEventType(String id) {
 
         switch(id) {

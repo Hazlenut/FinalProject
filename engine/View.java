@@ -33,7 +33,9 @@ public abstract class View {
         return screen;
     }
 
-    public abstract void keyListener(KeyEvent keyEvent);
+    public abstract void keyPressListener(KeyEvent keyEvent);
+
+    public abstract void keyReleaseListener(KeyEvent keyEvent);
 
     public abstract Button[] getToolBarButtons();
 

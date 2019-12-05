@@ -266,6 +266,11 @@ public class Event implements Comparable<Event> {
         return new Integer("56");
     }
 
+    public String toFileString() {
+
+        return name + "\n" + date.toString() + "\n" + likes + "\n" + dislikes + "\n" + people + "\n";
+    }
+
     @Override
     public String toString() {
 

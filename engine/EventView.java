@@ -24,13 +24,13 @@ import java.util.ArrayList;
 public class EventView extends View {
 
     private ArrayList<Event> eventList;
-    private int currentEventIndex;
+    private int currentEventIndex, eventTypeIndex, eventTypeTotal;
     private Dimension size;
     private Rectangle rectangle, rectangle2;
     private Canvas canvas;
     private GraphicsContext graphics;
     private TranslateTransition transition, transition2;
-    private boolean translating;
+    private boolean translating, shiftPressed;
     private Button[] buttons;
 
     public EventView(String name, Screen screen, Dimension size) {
@@ -39,13 +39,15 @@ public class EventView extends View {
 
         eventList = new ArrayList<>();
         currentEventIndex = 0;
+        eventTypeIndex = 0;
+        eventTypeTotal = (EventType.values().length - 1);
         this.size = size;
         Button attendingEvent = new Button("Attending Event");
         attendingEvent.setOnAction(event -> attendingEvent());
         Button notAttendingEvent = new Button("Not Attending Event");
         notAttendingEvent.setOnAction(event -> notAttendingEvent());
         Button nextEvent = new Button("Next Event");
-        nextEvent.setOnAction(event -> translate());
+        nextEvent.setOnAction(event -> translate(1000));
         buttons = new Button[] {attendingEvent, notAttendingEvent, nextEvent};
         rectangle = new Rectangle();
         rectangle2 = new Rectangle();
@@ -57,23 +59,23 @@ public class EventView extends View {
         stackPane.getChildren().addAll(rectangle, rectangle2, canvas);
         getBorderPane().setCenter(stackPane);
         translating = false;
-        getBorderPane().requestFocus();
+        shiftPressed = false;
 
     }
 
     public void attendingEvent() {
 
-        User.getCurrentUser().getEventsAttending().add(eventList.get(currentEventIndex));
-        eventList.get(currentEventIndex-1).setPeople(eventList.get(currentEventIndex-1).getPeople() +1);
-        //graphics.fillText(eventList.get(currentEventIndex).toString() + "\n Number of people attending: " + eventList.get(currentEventIndex).getPeople(), (getWidth() / 3.3), (getHeight() / 2));
-
+        if(!eventList.isEmpty()) {
+            graphics.fillText(eventList.get(currentEventIndex).toString(), (getWidth() / 3.3), (getHeight() / 2));
+        }
 
     }
 
     public void notAttendingEvent() {
 
-        User.getCurrentUser().getEventsAttending().remove(eventList.get(currentEventIndex));
-        eventList.get(currentEventIndex-1).setPeople(eventList.get(currentEventIndex=1).getPeople() -1);
+        if(!eventList.isEmpty()) {
+            graphics.fillText(eventList.get(currentEventIndex).toString(), (getWidth() / 3.3), (getHeight() / 2));
+        }
 
     }
 
@@ -94,18 +96,51 @@ public class EventView extends View {
         graphics.setFont(new Font(20));
         graphics.setFill(Color.DARKSALMON);
         graphics.setEffect(new Lighting(new Light.Distant()));
-        //graphics.fillText("Number of People attending: " + eventList.get(currentEventIndex).getPeople(),getWidth()/5, getHeight()/2.2);
-        graphics.fillText(eventList.get(currentEventIndex).toString() + "\n Number of people attending: " + eventList.get(currentEventIndex).getPeople(), (getWidth() / 3.3), (getHeight() / 2));
+        if(!eventList.isEmpty()) {
+            Event e = eventList.get(currentEventIndex);
+            switch(e.getType()) {
+                case MOVIE:
+                    graphics.fillText(e.toString(), (getWidth() / 3.3), (getHeight() / 2));
+                    break;
+                case CONCERT:
+                    graphics.fillText(e.toString(), (getWidth() / 3.3), (getHeight() / 2) - 10);
+                    break;
+                case SPORT:
+                    graphics.fillText(e.toString(), (getWidth() / 3.3), (getHeight() / 2) + 10);
+                    break;
+                case OTHER:
+                    graphics.fillText(e.toString(), (getWidth() / 3.3), (getHeight() / 2) + 20);
+                    break;
+            }
+        }
 
     }
 
     @Override
-    public void keyListener(KeyEvent keyEvent) {
+    public void keyReleaseListener(KeyEvent keyEvent) {
+
+        switch(keyEvent.getCode()) {
+
+            case SHIFT:
+                shiftPressed = false;
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void keyPressListener(KeyEvent keyEvent) {
 
         switch(keyEvent.getCode()) {
 
             case F5:
-                translate();
+                if(shiftPressed) {
+                    translate(1);
+                }else{
+                    translate(1000);
+                }
+                System.out.println(shiftPressed);
                 break;
             case F6:
                 attendingEvent();
@@ -113,14 +148,28 @@ public class EventView extends View {
             case F7:
                 notAttendingEvent();
                 break;
+            case UP:
+                if(eventTypeIndex < eventTypeTotal) {
+                    eventTypeIndex++;
+                }else{
+                    eventTypeIndex = 0;
+                }
+                eventList = EventLibrary.getEventsOfAType(EventType.getEventType(eventTypeIndex));
+                draw();
+                currentEventIndex = 0;
+                break;
+            case DOWN:
+                if(eventTypeIndex > 0) {
+                    eventTypeIndex--;
+                }else{
+                    eventTypeIndex = eventTypeTotal;
+                }
+                eventList = EventLibrary.getEventsOfAType(EventType.OTHER);
+                draw();
+                currentEventIndex = 0;
+                break;
             case SHIFT:
-                for(Event event : EventLibrary.getEvents()) {
-                    System.out.println(event);
-                }
-                System.out.println("- - - - - - -");
-                for(Event event : eventList) {
-                    System.out.println(event);
-                }
+                shiftPressed = true;
                 break;
 
         }
@@ -143,7 +192,7 @@ public class EventView extends View {
 
     }
 
-    private void translate() {
+    private void translate(long milliseconds) {
 
         if(!translating && currentEventIndex < (eventList.size() -1)) {
             translating = true;
@@ -152,9 +201,9 @@ public class EventView extends View {
             draw();
             rectangle.setEffect(new MotionBlur(24, 356));
             rectangle2.setEffect(new MotionBlur(24, 356));
-            transition = new TranslateTransition(Duration.millis(1000), rectangle);
+            transition = new TranslateTransition(Duration.millis(milliseconds), rectangle);
             transition.setByY(rectangle.getY() + getHeight());
-            transition2 = new TranslateTransition(Duration.millis(1000), rectangle2);
+            transition2 = new TranslateTransition(Duration.millis(milliseconds), rectangle2);
             transition2.setByY(rectangle.getY() - getHeight());
             transition.setOnFinished(event -> {
                 setShapes();

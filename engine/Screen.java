@@ -47,7 +47,8 @@ public final class Screen {
         anchor.setCenter(home.getBorderPane());
         currentViewIndex = HOME_VIEW;
         scene = new Scene(anchor, size.getWidth(), size.getHeight());
-        scene.setOnKeyPressed(this::keyListener);
+        scene.setOnKeyPressed(this::keyPress);
+        scene.setOnKeyReleased(this::keyRelease);
         initializeViews(size);
 
     }
@@ -98,7 +99,7 @@ public final class Screen {
         return (Stage)scene.getWindow();
     }
 
-    private void keyListener(KeyEvent keyEvent) {
+    private void keyPress(KeyEvent keyEvent) {
 
         if(currentViewIndex != HOME_VIEW) {
             switch(keyEvent.getCode()) {
@@ -131,13 +132,23 @@ public final class Screen {
                     getStage().setIconified(true);
                     break;
                 default:
-                    views.get(currentViewIndex).keyListener(keyEvent);
+                    views.get(currentViewIndex).keyPressListener(keyEvent);
                     break;
             }
         }else{
-            home.keyListener(keyEvent);
+            home.keyPressListener(keyEvent);
         }
         updateEventViews();
+
+    }
+
+    private void keyRelease(KeyEvent keyEvent) {
+
+        if(currentViewIndex != HOME_VIEW) {
+            //Code...
+        }else{
+            home.keyPressListener(keyEvent);
+        }
 
     }
 
@@ -147,7 +158,9 @@ public final class Screen {
         anchor.setCenter(views.get(currentViewIndex).getBorderPane());
         toolBar.getButtons().addAll(views.get(currentViewIndex).getToolBarButtons());
         anchor.setTop(toolBar);
-        EventLibrary.addEventsToLibrary();
+        if(EventLibrary.getEvents().isEmpty()) {
+            EventLibrary.addEventsToLibrary();
+        }
         ((EventView)views.get(EVENT_VIEW)).matchListToEventLibrary();
         ((SettingsView)views.get(SETTINGS_VIEW)).setUserIDLabel(User.getCurrentUser().getUserID());
         updateEventViews();

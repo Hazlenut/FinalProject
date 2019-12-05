@@ -51,8 +51,8 @@ public final class EventLibrary {
     private static void loadPreviousEvents() {
 
         try(Scanner input = new Scanner(new File(Main.getDirectory() + "events.txt"))) {
-            //Code...
-            loadDefaultLinks(); //FixMe
+            //
+            loadDefaultLinks();
         }catch(FileNotFoundException e) {
             loadDefaultLinks();
         }
@@ -70,47 +70,41 @@ public final class EventLibrary {
 
     }
 
+    public static void addCustomEvents(ArrayList<Event> events) {
+
+        EventLibrary.events.addAll(events);
+
+    }
+
     public static ArrayList<Event> getEvents() {
 
         return new ArrayList<>(events);
     }
 
-    //Add methods that retrieve a List of specific events from the main event ArrayList,
-    //like a List that only contains CONCERT events or MOVIE events...
+    public static ArrayList<Event> getEventsOfAType(EventType type) {
 
-    public static void save(String userID) {
-
-        try(FileWriter fileWriter = new FileWriter(new File(Main.getDirectory() + "events.txt"))) {
-            fileWriter.write("events");
-            for(Event event : events) {
-                //Code...
+        ArrayList<Event> events = new ArrayList<>();
+        for(Event event : EventLibrary.events) {
+            if(event.getType() == type) {
+                events.add(event);
             }
-        }catch(IOException e) {
-            //Code...
         }
 
+        return events;
+    }
+
+    public static boolean save(String userID) {
+
+        try(FileWriter fileWriter = new FileWriter(new File(Main.getDirectory() + userID + "-events.txt"))) {
+            fileWriter.write("events");
+            for(Event event : events) {
+                fileWriter.write(event.toFileString());
+            }
+        }catch(IOException e) {
+            return false;
+        }
+
+        return true;
     }
 
 }
-
-    //Add this method to get Movie Events based off a geographic location:
-
-    /*
-
-    public static ArrayList<Movie> getMovies(int zipCode, int numShows) throws IOException {
-
-        Elements div = document.select("PerformerCard__Details__name");
-		ArrayList<Movie> list = new ArrayList<>();
-		String baseURL = "https://www.google.com/search";
-		String fullURL = baseURL + "?q=movies near " + zipCode;
-		String html = Jsoup.connect(fullURL).get().html();
-		Document document = Jsoup.parse(html);
-		Elements div = document.select("div.kltat span");
-		for(int i = 0; i < numShows; i++) {
-			list.add(new Movie(div.get(i).ownText()));
-		}
-
-		return list;
-	}
-
-	*/

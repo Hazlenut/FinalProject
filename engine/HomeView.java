@@ -10,7 +10,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
-import javafx.animation.RotateTransition; 
 
 public class HomeView extends View {
 
@@ -31,7 +30,7 @@ public class HomeView extends View {
         label.setTextAlignment(TextAlignment.CENTER);
         VBox vBox = new VBox();
         textField = new TextField();
-        textField.setOnKeyPressed(this::keyListener);
+        textField.setOnKeyPressed(this::keyPressListener);
         textField.setPrefWidth(500);
         text = usersExist ? "Enter" : "Continue";
         enterButton = new Button(text);
@@ -72,9 +71,7 @@ public class HomeView extends View {
                 User.logUserIn(text);
                 getScreen().logIn();
             }else{
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setContentText("No User ID Found");
-                a.show();
+                new Alert(Alert.AlertType.ERROR, "No User ID Found").show();
             }
         }
 
@@ -83,11 +80,24 @@ public class HomeView extends View {
     @Override
     public Button[] getToolBarButtons() {
 
-        return new Button[0]; //HomeView doesn't add buttons
+        return new Button[0];
+    }
+
+    @Override
+    public void keyReleaseListener(KeyEvent keyEvent) {
+
+        switch(keyEvent.getCode()) {
+
+            //Code...
+
+        }
+
+        System.out.println("Working");
+
     }
 
 	@Override
-	public void keyListener(KeyEvent keyEvent) {
+	public void keyPressListener(KeyEvent keyEvent) {
 
         switch(keyEvent.getCode()) {
 

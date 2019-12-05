@@ -111,6 +111,10 @@ public class User implements Comparable<User> {
 
         users.add(user);
         currentUser = user;
+        ArrayList<Event> events = EventLoader.loadEvents(user.userID);
+        if(events != null) {
+            EventLibrary.addCustomEvents(events);
+        }
 
     }
 

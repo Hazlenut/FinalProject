@@ -41,3 +41,11 @@ We are building a JavaFX application that can get movie times, concert times, sp
 - Modified SettingsView and SearchView, drastically improving the UI of the SearchView and adding functionalty to the Settings screen
 
 - Added 2 abstract methods to the View class, implementing their functionality in all View subclasses (EventView, SearchView, SettingsView)
+
+12/5/2019:
+
+- Added the User class which stores all users and their associated data
+
+- Added the EventLoader class which loads a specific User's event data from a user specific text file
+
+- Updated the GUI significantly and added other minor changes
