@@ -1,5 +1,6 @@
 package engine;
 
+import javafx.collections.ListChangeListener;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -12,23 +13,28 @@ public class SettingsView extends View {
     private Button[] buttons;
 
     private Label saveLabel;
+    private Button goToLinkButton;
     private CheckBox checkBox1;
     private ListView<String> historyList;
+    private String link;
 
     public SettingsView(String name, Screen screen) {
 
         super(name, screen);
 
         saveLabel = new Label("Last saved at: never");
-        checkBox1 = new CheckBox("Encrypt Events File?");
-        checkBox1.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(checkBox1.isSelected());
-        });
+        checkBox1 = new CheckBox("Encrypt User Data?");
+        checkBox1.selectedProperty().setValue(Attributes.getAttribute("Encrypted").equalsIgnoreCase("Yes"));
+        checkBox1.selectedProperty().addListener((observable, oldValue, newValue) -> Main.setIsEncrypted(checkBox1.isSelected()));
         getBorderPane().setTop(saveLabel);
         getBorderPane().setLeft(new HBox(15, checkBox1));
         historyList = new ListView<>();
+        link = null;
+        historyList.getSelectionModel().getSelectedItems().addListener((ListChangeListener<String>) c -> link = historyList.getSelectionModel().getSelectedItems().get(0));
         getBorderPane().setCenter(new TitledPane("History", historyList));
-
+        goToLinkButton = new Button("Go to selected Link");
+        goToLinkButton.setOnAction(event -> getScreen().setSearchViewWindowTo(link));
+        getBorderPane().setRight(goToLinkButton);
         Button saveButton = new Button("Save Now");
         saveButton.setOnAction(event -> save());
         buttons = new Button[] {saveButton};

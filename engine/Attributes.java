@@ -39,6 +39,7 @@ public final class Attributes {
 
         defaultValues.offer("Title=Event Organizer");
         defaultValues.offer("Previously Loaded=No");
+        defaultValues.offer("Encrypted=Yes");
 
         try(FileWriter writer = new FileWriter(new File(directory + "attributes.txt"))) {
             while(!defaultValues.isEmpty()) {

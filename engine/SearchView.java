@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
-import org.w3c.dom.NodeList;
 
 import java.util.LinkedList;
 
@@ -89,21 +88,28 @@ public class SearchView extends View {
 //                break;
             default:
                 //Code...
-//                NodeList list = webView.getEngine().getDocument().getDocumentElement().getElementsByTagName("h1");
-//                for(int i = 0; i < list.getLength(); i++) {
-//                    if(!list.item(0).getTextContent().equals("\n")) {
-//                        System.out.println(list.item(0).getTextContent().trim().replaceAll(" ", ""));
-//                    }
-//                }
                 break;
 
         }
 
     }
 
+    //      NodeList list = webView.getEngine().getDocument().getDocumentElement().getElementsByTagName("h1");
+    //      for(int i = 0; i < list.getLength(); i++) {
+    //          if(!list.item(0).getTextContent().equals("\n")) {
+    //          System.out.println(list.item(0).getTextContent().trim().replaceAll(" ", ""));
+    //          }
+    //      }
+
+    public void goTo(String url) {
+
+        webView.getEngine().load(url);
+
+    }
+
     public void goToHome() {
 
-        webView.getEngine().load(HOME);
+        goTo(HOME);
 
     }
 

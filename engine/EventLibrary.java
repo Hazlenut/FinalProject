@@ -1,7 +1,11 @@
 package engine;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public final class EventLibrary {
 
@@ -39,10 +43,12 @@ public final class EventLibrary {
 
     private static void loadPreviousEvents() {
 
-        //Code...
-
-        //(if the loading of previous events fails...)
-        loadDefaultLinks();
+        try(Scanner input = new Scanner(new File(Main.getDirectory() + "events.txt"))) {
+            //Code...
+            loadDefaultLinks(); //FixMe
+        }catch(FileNotFoundException e) {
+            loadDefaultLinks();
+        }
 
     }
 
@@ -65,9 +71,16 @@ public final class EventLibrary {
     //Add methods that retrieve a List of specific events from the main event ArrayList,
     //like a List that only contains CONCERT events or MOVIE events...
 
-    public static void save() {
+    public static void save(String userID) {
 
-        //Save events to a state.txt file...
+        try(FileWriter fileWriter = new FileWriter(new File(Main.getDirectory() + "events.txt"))) {
+            fileWriter.write("events");
+            for(Event event : events) {
+                //Code...
+            }
+        }catch(IOException e) {
+            //Code...
+        }
 
     }
 

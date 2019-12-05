@@ -7,32 +7,50 @@ import javafx.scene.layout.VBox;
 public class HomeView extends View {
 
 	private Label label;
-	private Button enterButton;
+	private Button enterButton, newUserButton;
 	private TextField textField;
 
     public HomeView(String name, Screen screen) {
 
         super(name, screen);
 
-        label = new Label("Welcome to Event Organizer - please enter your User ID");
+        boolean usersExist = User.userFileExists();
+        String text = usersExist ? "Welcome to Event Organizer - please enter your User ID" : "Welcome to Event Organizer";
+        label = new Label(text);
         VBox vBox = new VBox();
         textField = new TextField();
-        enterButton = new Button("Enter");
+        text = usersExist ? "Enter" : "Continue";
+        enterButton = new Button(text);
         enterButton.setOnAction(event -> {
-            if(checkTextField()) {
-                //Code...
+            if(usersExist) {
+                checkTextField();
+            }else{
+                getScreen().logIn();
             }
         });
-        vBox.getChildren().add(label);
-        vBox.getChildren().add(textField);
+        newUserButton = new Button("New User?");
+        newUserButton.setOnAction(event -> {
+            Main.setNewUser(true);
+            getScreen().logIn();
+        });
+        vBox.getChildren().addAll(label);
+        if(usersExist) {
+            vBox.getChildren().addAll(textField, newUserButton);
+        }
         vBox.getChildren().add(enterButton);
+        Main.setNewUser(!usersExist);
         getBorderPane().setCenter(vBox);
 
     }
 
-    private boolean checkTextField() {
+    private void checkTextField() {
 
-        return false;
+        String text = textField.getText();
+        if(!text.replaceAll(" ", "").equals("") && User.validateUserID(text)) {
+            Main.setCurrentUserID(text);
+            getScreen().logIn();
+        }
+
     }
 
     @Override

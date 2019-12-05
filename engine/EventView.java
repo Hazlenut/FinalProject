@@ -20,7 +20,6 @@ public class EventView extends View {
         super(name, screen);
 
         eventList = new ArrayList<>();
-        eventList.addAll(EventLibrary.getEvents());
         canvas = new Canvas(size.getWidth(), size.getHeight());
         getBorderPane().setCenter(canvas);
         graphics = canvas.getGraphicsContext2D();

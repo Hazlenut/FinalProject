@@ -18,31 +18,25 @@ public final class Screen {
     private Scene scene;
     private BorderPane anchor;
     private ButtonBar toolBar;
+    private HomeView home;
     private ArrayList<View> views;
     private int currentViewIndex;
 
+    public static final int HOME_VIEW = -1;
     public static final int SEARCH_VIEW = 0;
     public static final int EVENT_VIEW = 1;
     public static final int SETTINGS_VIEW = 2;
-    public static final int HOME_VIEW = 3;
-    private static final int VIEW_COUNT = 4;
 
-    public Screen(Dimension size, int view) {
-
-        if(view < 0 || view >= VIEW_COUNT) {
-            view = 0;
-        }
+    public Screen(Dimension size) {
 
         anchor = new BorderPane();
         toolBar = new ButtonBar();
-        initializeViews(size);
-        anchor.setCenter(views.get(view).getBorderPane());
-        toolBar.getButtons().addAll(views.get(view).getToolBarButtons());
-        currentViewIndex = view;
-        anchor.setTop(toolBar);
+        home = new HomeView("Home", this);
+        anchor.setCenter(home.getBorderPane());
+        currentViewIndex = HOME_VIEW;
         scene = new Scene(anchor, size.getWidth(), size.getHeight());
         scene.setOnKeyPressed(this::keyListener);
-        ((SearchView)views.get(SEARCH_VIEW)).getHistory().addListener((ListChangeListener<WebHistory.Entry>) c -> ((SettingsView)views.get(SETTINGS_VIEW)).updateHistoryList(getSearchViewHistory()));
+        initializeViews(size);
 
     }
 
@@ -65,11 +59,7 @@ public final class Screen {
         views.add(new SettingsView(name, this));
         button.setOnAction(event -> switchView(SETTINGS_VIEW));
         toolBar.getButtons().add(button);
-        name = "Home";
-        button = new Button(name);
-        views.add(new HomeView(name, this));
-        button.setOnAction(event -> switchView(HOME_VIEW));
-        toolBar.getButtons().add(button);
+        ((SearchView)views.get(SEARCH_VIEW)).getHistory().addListener((ListChangeListener<WebHistory.Entry>) c -> ((SettingsView)views.get(SETTINGS_VIEW)).updateHistoryList(getSearchViewHistory()));
 
     }
 
@@ -90,46 +80,59 @@ public final class Screen {
 
     private void keyListener(KeyEvent keyEvent) {
 
-        switch(keyEvent.getCode()) {
-            case F1:
-                Main.saveOperations();
-                Platform.exit();
-                break;
-            case F2:
-            	switchView(HOME_VIEW);
-            	break;
-            case F5:
-                getEventsFromSearchView();
-                break;
-            case F8:
-                if(getStage().isFullScreen()) {
-                    getStage().setFullScreen(false);
-                }
-                Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-                getStage().setWidth(0.25 * size.getWidth());
-                getStage().setHeight(0.34 * size.getHeight());
-                getStage().centerOnScreen();
-                break;
-            case F9:
-                switchView(SEARCH_VIEW);
-                break;
-            case F10:
-                switchView(EVENT_VIEW);
-                break;
-            case F11:
-                if(getStage().isFullScreen()) {
-                    getStage().setFullScreen(false);
-                }else{
-                    getStage().setFullScreen(true);
-                }
-                break;
-            case F12:
-                getStage().setIconified(true);
-                break;
-            default:
-                views.get(currentViewIndex).keyListener(keyEvent);
-                break;
+        if(currentViewIndex != HOME_VIEW) {
+            switch(keyEvent.getCode()) {
+                case F1:
+                    Main.saveOperations();
+                    Platform.exit();
+                    break;
+                case F5:
+                    getEventsFromSearchView();
+                    break;
+                case F8:
+                    if(getStage().isFullScreen()) {
+                        getStage().setFullScreen(false);
+                    }
+                    Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+                    getStage().setWidth(0.25 * size.getWidth());
+                    getStage().setHeight(0.34 * size.getHeight());
+                    getStage().centerOnScreen();
+                    break;
+                case F9:
+                    switchView(SEARCH_VIEW);
+                    break;
+                case F10:
+                    switchView(EVENT_VIEW);
+                    break;
+                case F11:
+                    if(getStage().isFullScreen()) {
+                        getStage().setFullScreen(false);
+                    }else{
+                        getStage().setFullScreen(true);
+                    }
+                    break;
+                case F12:
+                    getStage().setIconified(true);
+                    break;
+                default:
+                    views.get(currentViewIndex).keyListener(keyEvent);
+                    break;
+            }
+        }else{
+            home.keyListener(keyEvent);
         }
+        updateEventViews();
+
+    }
+
+    public void logIn() {
+
+        currentViewIndex = SEARCH_VIEW;
+        anchor.setCenter(views.get(currentViewIndex).getBorderPane());
+        toolBar.getButtons().addAll(views.get(currentViewIndex).getToolBarButtons());
+        anchor.setTop(toolBar);
+        EventLibrary.addEventsToLibrary();
+        ((EventView)views.get(EVENT_VIEW)).matchListToEventLibrary();
         updateEventViews();
 
     }
@@ -155,12 +158,28 @@ public final class Screen {
 
     public void updateEventViews() {
 
-        for(View view : views) {
-            if(view instanceof EventView) {
-                ((EventView)view).update(new Dimension((int)scene.getWidth(), (int)scene.getHeight()));
+        if(currentViewIndex != HOME_VIEW) {
+            for(View view : views) {
+                if(view instanceof EventView) {
+                    ((EventView)view).update(new Dimension((int)scene.getWidth(), (int)scene.getHeight()));
+                }
             }
         }
 
+    }
+
+    public void setSearchViewWindowTo(String url) {
+
+        if(url != null) {
+            ((SearchView)views.get(SEARCH_VIEW)).goTo(url);
+            switchView(SEARCH_VIEW);
+        }
+
+    }
+
+    public int getCurrentViewIndex() {
+
+        return currentViewIndex;
     }
 
     public Scene getScene() {
