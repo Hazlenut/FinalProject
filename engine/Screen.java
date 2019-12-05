@@ -22,15 +22,27 @@ public final class Screen {
     private ArrayList<View> views;
     private int currentViewIndex;
 
-    public static final int HOME_VIEW = -1;
-    public static final int SEARCH_VIEW = 0;
-    public static final int EVENT_VIEW = 1;
-    public static final int SETTINGS_VIEW = 2;
+    private static final int HOME_VIEW = -1;
+    private static final int SEARCH_VIEW = 0;
+    private static final int EVENT_VIEW = 1;
+    private static final int SETTINGS_VIEW = 2;
 
     public Screen(Dimension size) {
 
+        initialize(size);
+
+    }
+
+    public void initialize(Dimension size) {
+
         anchor = new BorderPane();
         toolBar = new ButtonBar();
+        Button exitButton = new Button("Log Out");
+        exitButton.setOnAction(event -> {
+            User.logOutCurrentUser();
+            Main.exitToHomeScreen();
+        });
+        toolBar.getButtons().add(exitButton);
         home = new HomeView("Home", this);
         anchor.setCenter(home.getBorderPane());
         currentViewIndex = HOME_VIEW;
@@ -63,6 +75,14 @@ public final class Screen {
 
     }
 
+    public static void shutdown() {
+
+        User.logOutCurrentUser();
+        Attributes.save();
+        Platform.exit();
+
+    }
+
     private void switchView(int viewIndex) {
 
         toolBar.getButtons().removeAll(views.get(currentViewIndex).getToolBarButtons());
@@ -83,8 +103,7 @@ public final class Screen {
         if(currentViewIndex != HOME_VIEW) {
             switch(keyEvent.getCode()) {
                 case F1:
-                    Main.saveOperations();
-                    Platform.exit();
+                    shutdown();
                     break;
                 case F5:
                     getEventsFromSearchView();
@@ -133,6 +152,7 @@ public final class Screen {
         anchor.setTop(toolBar);
         EventLibrary.addEventsToLibrary();
         ((EventView)views.get(EVENT_VIEW)).matchListToEventLibrary();
+        ((SettingsView)views.get(SETTINGS_VIEW)).setUserIDLabel(User.getCurrentUser().getUserID());
         updateEventViews();
 
     }
@@ -175,11 +195,6 @@ public final class Screen {
             switchView(SEARCH_VIEW);
         }
 
-    }
-
-    public int getCurrentViewIndex() {
-
-        return currentViewIndex;
     }
 
     public Scene getScene() {

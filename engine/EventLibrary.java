@@ -6,14 +6,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.TreeSet;
 
 public final class EventLibrary {
 
-    private static ArrayList<Event> events;
+    private static TreeSet<Event> events;
 
     static {
 
-        events = new ArrayList<>();
+        events = new TreeSet<>();
+
+    }
+
+    public static void clear() {
+
+        events = new TreeSet<>();
 
     }
 
@@ -34,7 +41,7 @@ public final class EventLibrary {
         Event.addLink("https://www.stubhub.com/concert-tickets/category/1/", EventType.CONCERT);
 
         try{
-            events = Event.findEvents();
+            events.addAll(Event.findEvents());
         }catch(IOException e) {
             System.out.println("Default events failed");
         }
@@ -65,7 +72,7 @@ public final class EventLibrary {
 
     public static ArrayList<Event> getEvents() {
 
-        return events;
+        return new ArrayList<>(events);
     }
 
     //Add methods that retrieve a List of specific events from the main event ArrayList,

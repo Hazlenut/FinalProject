@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 
-public class Event {
+public class Event implements Comparable<Event> {
 
     private static LinkedList<Link> searchQueue;
     private static ArrayList<Link> activeLinks;
@@ -118,32 +118,13 @@ public class Event {
     private String name;
     private Date date;
     private EventType type;
+
     private int likes;
     private int dislikes;
     private int people;
     private double points;
     private int popularity;
     private int time;
-    private User user;
-
-    public Event(String name, Date date, EventType type, int likes, int dislikes, int people, User user) {
-
-        this.name = name;
-        this.date = date;
-        this.type = type;
-        this.likes = likes;
-        this.dislikes = dislikes;
-        this.people = people;
-        this.time = getTime();
-        //replace 10 with age of event
-        if(likes*2 <= dislikes*1.5) {
-        	this.points = 0;
-        }else {
-        	this.points = ((likes * 2) + (dislikes*-1.5) + -0.05*(Math.pow(time, 2)));
-        }
-        this.user = user;
-
-    }
 
     public Event(String name, Date date, EventType type, int likes, int dislikes, int people) {
 
@@ -202,15 +183,15 @@ public class Event {
     
     public void addPoint() {
 
-    	user.addPoints();
-    	user.addPoints();
+    	//user.addPoints();
+    	//user.addPoints();
     	this.points++;
 
     }
 
     public void removePoint() {
 
-    	user.removePoints();
+    	//user.removePoints();
     	this.points--;
 
     }
@@ -277,6 +258,12 @@ public class Event {
     public EventType getType() {
     	
     	return type;
+    }
+
+    @Override
+    public int compareTo(Event o) {
+
+        return new Integer("56");
     }
 
     @Override

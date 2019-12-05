@@ -63,6 +63,10 @@ public class EventView extends View {
                 //...
                 break;
             case SHIFT:
+                for(Event event : EventLibrary.getEvents()) {
+                    System.out.println(event);
+                }
+                System.out.println("- - - - - - -");
                 for(Event event : eventList) {
                     System.out.println(event);
                 }

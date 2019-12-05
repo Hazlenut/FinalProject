@@ -1,22 +1,41 @@
 package engine;
 
+import javafx.scene.control.Alert;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class User implements Comparable<User> {
 
-    private static PriorityQueue<User> users;
+    private static ArrayList<User> users;
+    private static boolean initialized = false, encrypted;
+    private static User currentUser;
 
     public static void initialize() {
 
-        users = new PriorityQueue<>();
-        getUserIDs();
+        if(!initialized) {
+            users = new ArrayList<>();
+            getUserIDs();
+            encrypted = Attributes.getAttribute("Encrypted").equalsIgnoreCase("Yes");
+            currentUser = null;
+            initialized = true;
+        }
+
+    }
+
+    public static void setEncrypted(boolean encrypted) {
+
+        if(encrypted) {
+            Attributes.updateAttribute("Encrypted", "Yes", "No");
+        }else{
+            Attributes.updateAttribute("Encrypted", "No", "Yes");
+        }
+        User.encrypted = encrypted;
 
     }
 
@@ -44,12 +63,12 @@ public class User implements Comparable<User> {
                 }
             }
         }catch(FileNotFoundException e) {
-            //userIDs queue stays at size 0
+            //users.size() stays at 0
         }
 
     }
 
-    public static boolean save(boolean encrypted) {
+    public static boolean save() {
 
         if(userFileExists()) {
             try(FileWriter fileWriter = new FileWriter(new File(Main.getDirectory() + "userIDs.txt"))) {
@@ -72,9 +91,46 @@ public class User implements Comparable<User> {
         return true;
     }
 
-    public static void addUser(String userID) {
+    public static void logOutCurrentUser() {
 
-        users.add(new User(userID));
+        save();
+        if(currentUser != null) {
+            EventLibrary.save(User.getCurrentUser().getUserID());
+            EventLibrary.clear();
+        }
+        currentUser = null;
+
+    }
+
+    public static User getCurrentUser() {
+
+        return currentUser;
+    }
+
+    private static void addUser(User user) {
+
+        users.add(user);
+        currentUser = user;
+
+    }
+
+    public static boolean logUserIn(String userID) {
+
+        User user = getUser(userID);
+        if(currentUser == null && user != null) {
+            currentUser = user;
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void registerNewUser() {
+
+        if(currentUser == null) {
+            addUser(new User(generateID()));
+            new Alert(Alert.AlertType.INFORMATION, "Your userID is " + User.getCurrentUser().getUserID()).show();
+        }
 
     }
 
@@ -94,7 +150,7 @@ public class User implements Comparable<User> {
         return false;
     }
 
-    public static String generateID() {
+    private static String generateID() {
 
         String id;
         do{
@@ -102,6 +158,17 @@ public class User implements Comparable<User> {
         }while(validateUserID(id));
 
         return id;
+    }
+
+    public static User getUser(String userID) {
+
+        for (User user : users) {
+            if (user.getUserID().equals(userID)) {
+                return user;
+            }
+        }
+
+        return null;
     }
 
     public static ArrayList<User> getUserList() {
