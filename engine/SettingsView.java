@@ -1,9 +1,14 @@
 package engine;
 
 import javafx.collections.ListChangeListener;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +26,9 @@ public class SettingsView extends View {
     public SettingsView(String name, Screen screen) {
 
         super(name, screen);
-
+        
+        getBorderPane().setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, CornerRadii.EMPTY, Insets.EMPTY)));
+        
         saveLabel = new Label("Last saved at: never");
         userIDLabel = new Label();
         checkBox1 = new CheckBox("Encrypt User Data?");

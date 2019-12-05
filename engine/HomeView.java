@@ -10,6 +10,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
+import javafx.animation.RotateTransition; 
 
 public class HomeView extends View {
 
