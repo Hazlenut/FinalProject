@@ -29,3 +29,23 @@ We are building a JavaFX application that can get movie times, concert times, sp
 - Added the Screen class which loads up the JavaFX GUI and holds all of the individual View instances added to it as well as the the ButtonBar toolbar
 
 - Modified the code within Main.java to fit the new classes which have been added
+
+12/4/2019:
+
+- Added the CloutTest class which will include methods to calculate the "clout", or popularity of an event; furthermore, the Event class was updated so that Event objects can now have more attributes
+
+- Modified the EventView class, adding functionality to draw onto the screen and to display Event objects retrieved from the EventLibrary class
+
+- Made minor changes to Main.java
+
+- Modified SettingsView and SearchView, drastically improving the UI of the SearchView and adding functionalty to the Settings screen
+
+- Added 2 abstract methods to the View class, implementing their functionality in all View subclasses (EventView, SearchView, SettingsView)
+
+12/5/2019:
+
+- Added the User class which stores all users and their associated data
+
+- Added the EventLoader class which loads a specific User's event data from a user specific text file
+
+- Updated the GUI significantly and added other minor changes

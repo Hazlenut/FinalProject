@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Scanner;
-import java.util.Set;
 
 public final class Attributes {
     
@@ -24,7 +23,8 @@ public final class Attributes {
         directory = Main.getDirectory();
         stateChanged = false;
         attributes = new HashMap<>();
-        try(Scanner input = new Scanner(new File(directory + "\\attributes.txt"))) {
+        defaultValues = new PriorityQueue<>();
+        try(Scanner input = new Scanner(new File(directory + "attributes.txt"))) {
             while(input.hasNext()) {
                 String next = input.nextLine();
                 attributes.put(next.substring(0, next.indexOf('=')), next.substring(next.indexOf('=') + 1, next.length()));
@@ -35,15 +35,13 @@ public final class Attributes {
 
     }
 
-    //Default attributes if attribute.txt file is missing
     private static void initializeDefaultAttributes() {
-
-        defaultValues = new PriorityQueue<>();
 
         defaultValues.offer("Title=Event Organizer");
         defaultValues.offer("Previously Loaded=No");
+        defaultValues.offer("Encrypted=Yes");
 
-        try(FileWriter writer = new FileWriter(new File(directory + "\\attributes.txt"))) {
+        try(FileWriter writer = new FileWriter(new File(directory + "attributes.txt"))) {
             while(!defaultValues.isEmpty()) {
                 String string = defaultValues.remove();
                 writer.write(string);
@@ -61,14 +59,13 @@ public final class Attributes {
 
     }
 
-    //Saves the attributes to the attribute.txt file
     public static void save() {
 
         if(stateChanged) {
             for(String key : attributes.keySet()) {
                 defaultValues.add(key + "=" + attributes.get(key));
             }
-            try(FileWriter fileWriter = new FileWriter(new File(directory + "\\attributes.txt"))) {
+            try(FileWriter fileWriter = new FileWriter(new File(directory + "attributes.txt"))) {
                 while(!defaultValues.isEmpty()) {
                     fileWriter.write(defaultValues.remove());
                     if(!defaultValues.isEmpty()) {
@@ -78,11 +75,6 @@ public final class Attributes {
             }catch(IOException e) {}
         }
 
-    }
-
-    public static Set<String> getAllTypes() {
-
-        return attributes.keySet();
     }
 
     public static String getAttribute(String type) {
@@ -96,11 +88,10 @@ public final class Attributes {
 
     }
 
-    public static boolean updateAttribute(String type, String newAttribute) {
+    public static boolean updateAttribute(String type, String oldAttribute, String newAttribute) {
 
         if(attributes.containsKey(type)) {
-            attributes.replace(type, newAttribute);
-            stateChanged = true;
+            stateChanged = attributes.replace(type, oldAttribute, newAttribute);
         }
 
         return stateChanged;
