@@ -48,6 +48,8 @@ public class HomeView extends View {
         vBox.getChildren().addAll(label);
         if(usersExist) {
             vBox.getChildren().addAll(textField, newUserButton);
+        }else {
+        	
         }
         vBox.setSpacing(25);
         vBox.getChildren().add(enterButton);
@@ -66,6 +68,10 @@ public class HomeView extends View {
         if(!text.replaceAll(" ", "").equals("") && User.validateUserID(text)) {
             Main.setCurrentUserID(text);
             getScreen().logIn();
+        }else {
+        	Alert a = new Alert(Alert.AlertType.ERROR);
+        	a.setContentText("No User ID Found");
+        	a.show();
         }
 
     }
