@@ -64,12 +64,16 @@ public class EventView extends View {
     public void attendingEvent() {
 
         User.getCurrentUser().getEventsAttending().add(eventList.get(currentEventIndex));
+        eventList.get(currentEventIndex-1).setPeople(eventList.get(currentEventIndex-1).getPeople() +1);
+        //graphics.fillText(eventList.get(currentEventIndex).toString() + "\n Number of people attending: " + eventList.get(currentEventIndex).getPeople(), (getWidth() / 3.3), (getHeight() / 2));
+
 
     }
 
     public void notAttendingEvent() {
 
         User.getCurrentUser().getEventsAttending().remove(eventList.get(currentEventIndex));
+        eventList.get(currentEventIndex-1).setPeople(eventList.get(currentEventIndex=1).getPeople() -1);
 
     }
 
@@ -90,7 +94,8 @@ public class EventView extends View {
         graphics.setFont(new Font(20));
         graphics.setFill(Color.DARKSALMON);
         graphics.setEffect(new Lighting(new Light.Distant()));
-        graphics.fillText(eventList.get(currentEventIndex).toString(), (getWidth() / 3.3), (getHeight() / 2));
+        //graphics.fillText("Number of People attending: " + eventList.get(currentEventIndex).getPeople(),getWidth()/5, getHeight()/2.2);
+        graphics.fillText(eventList.get(currentEventIndex).toString() + "\n Number of people attending: " + eventList.get(currentEventIndex).getPeople(), (getWidth() / 3.3), (getHeight() / 2));
 
     }
 
