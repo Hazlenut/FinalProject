@@ -69,37 +69,19 @@ public class SearchView extends View {
             case F4:
                 goToHome();
                 break;
+            case F5:
+                getScreen().getEventsFromSearchView();
+                break;
             case LEFT:
                 previousPage();
                 break;
             case RIGHT:
                 nextPage();
                 break;
-//            case SHIFT:
-//                for(String s : history) {
-//                    System.out.println(s);
-//                }
-//                System.out.println(currentPageIndex);
-//                break;
-//            case ALT:
-//                for(WebHistory.Entry entry : webView.getEngine().getHistory().getEntries()) {
-//                    System.out.println(entry.getUrl());
-//                }
-//                break;
-            default:
-                //Code...
-                break;
 
         }
 
     }
-
-    //      NodeList list = webView.getEngine().getDocument().getDocumentElement().getElementsByTagName("h1");
-    //      for(int i = 0; i < list.getLength(); i++) {
-    //          if(!list.item(0).getTextContent().equals("\n")) {
-    //          System.out.println(list.item(0).getTextContent().trim().replaceAll(" ", ""));
-    //          }
-    //      }
 
     public void goTo(String url) {
 

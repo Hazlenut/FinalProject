@@ -105,9 +105,6 @@ public final class Screen {
                 case F1:
                     shutdown();
                     break;
-                case F5:
-                    getEventsFromSearchView();
-                    break;
                 case F8:
                     if(getStage().isFullScreen()) {
                         getStage().setFullScreen(false);

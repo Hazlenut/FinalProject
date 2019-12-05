@@ -177,26 +177,26 @@ public class User implements Comparable<User> {
     }
 
     private String userID;
-
+    private ArrayList<Event> eventsAttending;
     private int factor;
     private int points;
 
     private User(String userID) {
 
         this.userID = userID;
+        eventsAttending = new ArrayList<>();
         factor = 5;
 
+    }
+
+    public ArrayList<Event> getEventsAttending() {
+
+        return eventsAttending;
     }
 
     public String getUserID() {
 
         return userID;
-    }
-
-    public void setUserID(String userID) {
-
-        this.userID = userID;
-
     }
 
     public int getFactor() {
@@ -213,12 +213,6 @@ public class User implements Comparable<User> {
     public int getPoints() {
 
         return points;
-    }
-
-    public void setPoints(int points) {
-
-        this.points = points;
-
     }
 
     public void addPoints() {
