@@ -129,7 +129,10 @@ public class User implements Comparable<User> {
 
         if(currentUser == null) {
             addUser(new User(generateID()));
-            new Alert(Alert.AlertType.INFORMATION, "Your userID is " + User.getCurrentUser().getUserID()).show();
+            Alert a = new Alert(Alert.AlertType.INFORMATION, "Your userID is " + User.getCurrentUser().getUserID());
+            a.setTitle("Event Organizer");
+            a.setHeaderText("Welcome to Event Organizer!");
+            a.show();
         }
 
     }
