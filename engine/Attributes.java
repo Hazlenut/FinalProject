@@ -23,6 +23,7 @@ public final class Attributes {
         directory = Main.getDirectory();
         stateChanged = false;
         attributes = new HashMap<>();
+        defaultValues = new PriorityQueue<>();
         try(Scanner input = new Scanner(new File(directory + "attributes.txt"))) {
             while(input.hasNext()) {
                 String next = input.nextLine();
@@ -34,10 +35,7 @@ public final class Attributes {
 
     }
 
-    //Default attributes if attribute.txt file is missing
     private static void initializeDefaultAttributes() {
-
-        defaultValues = new PriorityQueue<>();
 
         defaultValues.offer("Title=Event Organizer");
         defaultValues.offer("Previously Loaded=No");
@@ -60,7 +58,6 @@ public final class Attributes {
 
     }
 
-    //Saves the attributes to the attribute.txt file
     public static void save() {
 
         if(stateChanged) {
@@ -90,11 +87,10 @@ public final class Attributes {
 
     }
 
-    public static boolean updateAttribute(String type, String newAttribute) {
+    public static boolean updateAttribute(String type, String oldAttribute, String newAttribute) {
 
         if(attributes.containsKey(type)) {
-            attributes.replace(type, newAttribute);
-            stateChanged = true;
+            stateChanged = attributes.replace(type, oldAttribute, newAttribute);
         }
 
         return stateChanged;

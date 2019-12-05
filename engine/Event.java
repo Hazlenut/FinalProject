@@ -5,8 +5,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -127,6 +125,7 @@ public class Event {
     private int popularity;
     private int time;
     private User user;
+
     public Event(String name, Date date, EventType type, int likes, int dislikes, int people, User user) {
 
         this.name = name;
@@ -143,9 +142,9 @@ public class Event {
         	this.points = ((likes * 2) + (dislikes*-1.5) + -0.05*(Math.pow(time, 2)));
         }
         this.user = user;
-        
 
     }
+
     public Event(String name, Date date, EventType type, int likes, int dislikes, int people) {
 
         this.name = name;
@@ -161,65 +160,75 @@ public class Event {
         }else {
         	this.points = ((likes * 2) + (dislikes*-1.5) + -0.05*(Math.pow(time, 2)));
         }
-        
-        
 
     }
+
     public int getPopularity() {
     	
     	return popularity;
-    	
     }
+
     public void setPopularity() {
     	
     	popularity = Integer.parseInt((Integer.toString((likes+dislikes)/100)));
     	
     }
+
     public double getPoints() {
     	
     	return points;
-    	
     }
+
     public void setPoints(double points) {
-    	
+
     	this.points = points;
     	
     }
+
     public int getLikes() {
     	
 		return likes;
-		
 	}
     
     public int getPeople() {
     	
     	return people;
-    	
     }
     
     public int getDisplayedPoints() {
+
     	return (2 * likes) - dislikes;
     }
     
     public void addPoint() {
+
     	user.addPoints();
     	user.addPoints();
     	this.points++;
+
     }
+
     public void removePoint() {
+
     	user.removePoints();
     	this.points--;
+
     }
+
     public int getTime() {
+
     	setTime();
+
     	return time;
     }
     
     public void setTime() {
-    	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    	Date a = new Date();
-    	time = a.getHours();
+
+    	//DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    	time = new Date().getHours();
+
     }
+
     public void setPeople(int people) {
     	
     	this.people = people;
@@ -235,7 +244,6 @@ public class Event {
 	public int getDislikes() {
 		
 		return dislikes;
-		
 	}
 
 	public void setDislikes(int dislikes) {
@@ -247,7 +255,6 @@ public class Event {
 	public String getName() {
 
         return name;
-        
     }
 
     public void setName(String name) {
@@ -259,7 +266,6 @@ public class Event {
     public Date getDate() {
 
         return date;
-        
     }
 
     public void setDate(Date date) {
@@ -271,14 +277,12 @@ public class Event {
     public EventType getType() {
     	
     	return type;
-    	
     }
 
     @Override
     public String toString() {
 
         return getType() + " Event: " + name + " on " + date;
-        
     }
 
 }

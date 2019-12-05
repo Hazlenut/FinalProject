@@ -19,12 +19,11 @@ public final class EventLibrary {
             loadPreviousEvents();
         }else{
             loadDefaultLinks();
-            Attributes.updateAttribute("Previously Loaded", "Yes");
+            Attributes.updateAttribute("Previously Loaded", "No", "Yes");
         }
 
     }
-    
-    //This method adds default links so that users can have reccommended events before they add their own
+
     private static void loadDefaultLinks() {
 
         Event.addLink("https://www.amctheatres.com/movies", EventType.MOVIE);
@@ -40,7 +39,7 @@ public final class EventLibrary {
 
     private static void loadPreviousEvents() {
 
-        //IMPLEMENT, using state.txt file...
+        //Code...
 
         //(if the loading of previous events fails...)
         loadDefaultLinks();

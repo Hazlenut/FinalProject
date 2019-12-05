@@ -12,7 +12,7 @@ public class SettingsView extends View {
     private Button[] buttons;
 
     private Label saveLabel;
-    private CheckBox checkBox1, checkBox2;
+    private CheckBox checkBox1;
     private ListView<String> historyList;
 
     public SettingsView(String name, Screen screen) {
@@ -24,12 +24,7 @@ public class SettingsView extends View {
         checkBox1.selectedProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println(checkBox1.isSelected());
         });
-//        checkBox2 = new CheckBox("");
-//        checkBox2.selectedProperty().addListener((observable, oldValue, newValue) -> {
-//            System.out.println(checkBox2.isSelected());
-//        });
         getBorderPane().setTop(saveLabel);
-//        getBorderPane().setLeft(new HBox(15, checkBox1, checkBox2));
         getBorderPane().setLeft(new HBox(15, checkBox1));
         historyList = new ListView<>();
         getBorderPane().setCenter(new TitledPane("History", historyList));

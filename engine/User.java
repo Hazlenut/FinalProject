@@ -1,6 +1,7 @@
 package engine;
 
 public class User {
+
 	private String username;
 	private String password;
 	// if you want to make a continue as guest option
@@ -9,9 +10,13 @@ public class User {
 	private int points;
 	
 	public User() {
+
 		isGuest = true;
+
 	}
+
 	public User(String username, String password) {
+
 		this.username = username;
 		this.password = password;
 		isGuest = false;
@@ -20,44 +25,70 @@ public class User {
 	}
 
 	public String getUsername() {
+
 		return username;
 	}
 
 	public void setUsername(String username) {
+
 		this.username = username;
+
 	}
 
 	public String getPassword() {
+
 		return password;
 	}
 
 	public void setPassword(String password) {
+
 		this.password = password;
+
 	}
+
 	public boolean getIsGuest() {
+
 		return isGuest;
 	}
+
 	public void setIsGuest(boolean guest) {
+
 		this.isGuest = guest;
+
 	}
+
 	public int getFactor() {
+
 		return factor;
 	}
+
 	public void setFactor(int factor) {
+
 		this.factor = factor;
+
 	}
 	
 	public int getPoints() {
+
 		return points;
 	}
+
 	public void setPoints(int points) {
+
 		this.points = points;
+
 	}
+
 	public void addPoints() {
+
 		this.points++;
+
 	}
+
 	public void removePoints() {
+
 		this.points--;
+
 	}
 	
 }

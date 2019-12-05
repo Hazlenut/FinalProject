@@ -4,7 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Font;
+import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -38,18 +38,17 @@ public class EventView extends View {
 
     private void initialize() {
 
-        //Initialization code...
+        //Initialization graphics code...
 
     }
 
     public void draw() {
 
-        double i = 0;
-        for(Event event : eventList) {
-            graphics.setFont(new Font(15));
-            graphics.fillText(event.toString(), (0.12 * canvas.getWidth()), i);
-            i += graphics.getFont().getSize() * 1.12;
-        }
+        graphics = canvas.getGraphicsContext2D();
+        graphics.clearRect(0, 0, getWidth(), getHeight());
+
+        graphics.setStroke(Color.RED);
+        graphics.fillRect(getWidthPercent(0.1), getHeightPercent(0.1), getWidthPercent(0.8), getHeightPercent(0.8));
 
     }
 
@@ -64,12 +63,37 @@ public class EventView extends View {
             case DOWN:
                 //...
                 break;
+            case SHIFT:
+                for(Event event : eventList) {
+                    System.out.println(event);
+                }
+                break;
             default:
                 //Code...
                 break;
 
         }
 
+    }
+
+    private double getWidthPercent(double perecent) {
+
+        return (perecent * getWidth());
+    }
+
+    private double getHeightPercent(double percent) {
+
+        return (percent * getHeight());
+    }
+
+    public double getWidth() {
+
+        return canvas.getWidth();
+    }
+
+    public double getHeight() {
+
+        return canvas.getHeight();
     }
 
     public void update(Dimension size) {

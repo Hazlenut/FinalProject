@@ -2,41 +2,56 @@ package engine;
 
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-
-import java.util.ArrayList;
-import java.util.Date;
+import javafx.scene.layout.VBox;
 
 public class HomeView extends View {
-	
-	private Label test;
-	private Button[] buttons;
+
+	private Label label;
+	private Button enterButton;
+	private TextField textField;
 
     public HomeView(String name, Screen screen) {
 
         super(name, screen);
 
-        test = new Label("Welcome to Event Organizer");
-        getBorderPane().setTop(test);
+        label = new Label("Welcome to Event Organizer - please enter your User ID");
+        VBox vBox = new VBox();
+        textField = new TextField();
+        enterButton = new Button("Enter");
+        enterButton.setOnAction(event -> {
+            if(checkTextField()) {
+                //Code...
+            }
+        });
+        vBox.getChildren().add(label);
+        vBox.getChildren().add(textField);
+        vBox.getChildren().add(enterButton);
+        getBorderPane().setCenter(vBox);
 
     }
 
+    private boolean checkTextField() {
 
+        return false;
+    }
 
     @Override
     public Button[] getToolBarButtons() {
 
-        return buttons;
+        return new Button[0]; //HomeView doesn't add buttons
     }
-
-
 
 	@Override
 	public void keyListener(KeyEvent keyEvent) {
-		// TODO Auto-generated method stub
-		
+
+        switch(keyEvent.getCode()) {
+
+            default:
+                //Code...
+                break;
+
+        }
+
 	}
-
-
 
 }
