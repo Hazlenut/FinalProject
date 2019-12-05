@@ -60,7 +60,8 @@ public class EventView extends View {
         getBorderPane().setCenter(stackPane);
         translating = false;
         shiftPressed = false;
-
+        
+        
     }
 
     public void attendingEvent() {

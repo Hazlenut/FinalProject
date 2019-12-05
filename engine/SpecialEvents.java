@@ -1,3 +1,4 @@
+package engine;
 import java.util.ArrayList;
 
 public class SpecialEvents {
@@ -16,7 +17,7 @@ public class SpecialEvents {
  public String getshowName() {
   return showName;
  }
- public void setShowName(String date) {
+ public void setShowName(String showName) {
   this.showName = showName;
  }
  public String getDate() {
