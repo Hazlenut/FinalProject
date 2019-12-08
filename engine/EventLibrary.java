@@ -40,6 +40,8 @@ public final class EventLibrary {
         Event.addLink("https://www.amctheatres.com/movies", EventType.MOVIE);
         Event.addLink("https://www.stubhub.com/concert-tickets/category/1/", EventType.CONCERT);
         Event.addLink("https://www.stubhub.com/sports-tickets/category/28/", EventType.SPORT);
+        Event.addLink("https://www.stubhub.com/theater-and-arts-tickets/category/174/", EventType.ART);
+        
 
         try{
             events.addAll(Event.findEvents());
