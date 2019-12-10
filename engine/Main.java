@@ -5,21 +5,12 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 
-import java.awt.*;
+import java.io.IOException;
 
 public class Main extends Application {
 
-    private static Stage stage;
-    private static Screen mainView;
-    private static String directory;
-    
     public static void main(String[] args) {
 
-        if(args.length > 0) {
-           directory = args[0];
-        }else{
-           directory = "";
-        }
         launch(args);
 
     }
@@ -27,31 +18,33 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        stage = primaryStage;
-        User.initialize();
-        stage.setTitle(Attributes.getAttribute("Title"));
-        Rectangle2D screen = javafx.stage.Screen.getPrimary().getVisualBounds();
-        mainView = new Screen(new Dimension((int)(0.35 * screen.getWidth()), (int)(0.5 * screen.getHeight())));
-        stage.setScene(mainView.getScene());
-        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        stage.setOnCloseRequest(event -> Screen.shutdown());
-        stage.widthProperty().addListener((observable, oldValue, newValue) -> mainView.updateEventViews());
-        stage.heightProperty().addListener((observable, oldValue, newValue) -> mainView.updateEventViews());
-        stage.show();
+        if(getParameters().getUnnamed().size() > 0) {
+            UserManager.initialize(getParameters().getRaw().get(0));
+        }else{
+            UserManager.initialize("");
+        }
+        new Thread(() -> {
+            try {
+                EventManager.initialize();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        Rectangle2D screenSize = javafx.stage.Screen.getPrimary().getVisualBounds();
+        Screen screen = new Screen((0.37 * screenSize.getWidth()), (0.45 * screenSize.getHeight()));
+        primaryStage.setScene(screen);
+        primaryStage.setTitle("Event Organizer");
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        primaryStage.show();
 
     }
 
-    public static void exitToHomeScreen() {
+    @Override
+    public void stop() throws Exception {
 
-        stage.setScene(null);
-        mainView = new Screen(new Dimension((int)stage.getWidth(), (int)stage.getHeight()));
-        stage.setScene(mainView.getScene());
+        UserManager.save();
+        super.stop();
 
-    }
-
-    public static String getDirectory() {
-        
-        return directory;
     }
 
 }

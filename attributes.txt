@@ -1,3 +1,0 @@
-Encrypted=Yes
-Previously Loaded=Yes
-Title=Event Organizer

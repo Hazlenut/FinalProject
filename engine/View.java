@@ -1,42 +1,58 @@
 package engine;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
-public abstract class View {
+public abstract class View extends BorderPane {
 
     private Screen screen;
-    private BorderPane borderPane;
-    private String name;
+    private ButtonBar buttonBar;
 
-    public View(String name, Screen screen) {
+    protected View(Screen screen) {
 
         this.screen = screen;
-        borderPane = new BorderPane();
-        this.name = name;
+        buttonBar = new ButtonBar();
+        Button logOutButton = new Button("Log out");
+        ButtonBar.setButtonData(logOutButton, ButtonBar.ButtonData.LEFT);
+        logOutButton.setOnAction(event -> getScreen().setCurrentUser(null));
+        MenuButton viewSelector = new MenuButton("Switch to");
+        MenuItem eventViewItem = new MenuItem("Events");
+        eventViewItem.setOnAction(event -> getScreen().switchView(ViewType.EVENT_VIEW));
+        MenuItem searchViewItem = new MenuItem("Web Browser");
+        searchViewItem.setOnAction(event -> getScreen().switchView(ViewType.SEARCH_VIEW));
+        MenuItem settingViewItem = new MenuItem("Settings");
+        settingViewItem.setOnAction(event -> getScreen().switchView(ViewType.SETTINGS_VIEW));
+        viewSelector.getItems().addAll(eventViewItem, searchViewItem, settingViewItem);
+        viewSelector.setAlignment(Pos.TOP_RIGHT);
+        buttonBar.getButtons().addAll(logOutButton, viewSelector);
+        setTop(buttonBar);
 
     }
 
-    public BorderPane getBorderPane() {
-
-        return borderPane;
-    }
-
-    public String getName() {
-
-        return name;
-    }
-
-    public Screen getScreen() {
+    protected Screen getScreen() {
 
         return screen;
     }
 
-    public abstract void keyPressListener(KeyEvent keyEvent);
+    protected ButtonBar getButtonBar() {
 
-    public abstract void keyReleaseListener(KeyEvent keyEvent);
+        return buttonBar;
+    }
 
-    public abstract Button[] getToolBarButtons();
+    protected abstract void keyPressed(KeyEvent keyEvent);
+
+    public enum ViewType {
+
+        HOME_VIEW,
+        EVENT_VIEW,
+        SEARCH_VIEW,
+        SETTINGS_VIEW
+
+    }
 
 }

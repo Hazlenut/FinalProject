@@ -9,20 +9,19 @@ import javafx.scene.web.WebView;
 
 import java.util.LinkedList;
 
-public class SearchView extends View {
+//Can't be extended
+public final class SearchView extends View {
+
+    private static final String HOME = "https://www.google.com";
 
     private LinkedList<String> history;
     private int currentPageIndex;
     private boolean newPage;
-
     private WebView webView;
-    private Button[] buttons;
 
-    private static final String HOME = "https://www.google.com";
+    public SearchView(Screen screen) {
 
-    public SearchView(String name, Screen screen) {
-
-        super(name, screen);
+        super(screen);
 
         Button button1 = new Button("Previous");
         button1.setOnAction(event -> previousPage());
@@ -30,11 +29,9 @@ public class SearchView extends View {
         button2.setOnAction(event -> nextPage());
         Button button3 = new Button("Google");
         button3.setOnAction(event -> goToHome());
-        Button button4 = new Button("Get Events");
-        button4.setOnAction(event -> getScreen().getEventsFromSearchView());
-        buttons = new Button[] {button1, button2, button3, button4};
+        getButtonBar().getButtons().addAll(button1, button2, button3);
         webView = new WebView();
-        getBorderPane().setCenter(webView);
+        setCenter(webView);
         webView.getEngine().load(HOME);
         history = new LinkedList<>();
         newPage = true;
@@ -55,33 +52,12 @@ public class SearchView extends View {
 
     }
 
-    @Override
-    public Button[] getToolBarButtons() {
-
-        return buttons;
-    }
-
-    @Override
-    public void keyReleaseListener(KeyEvent keyEvent) {
-
-        switch(keyEvent.getCode()) {
-
-            //Code...
-
-        }
-
-    }
-
-    @Override
-    public void keyPressListener(KeyEvent keyEvent) {
+    public void keyPressed(KeyEvent keyEvent) {
 
         switch(keyEvent.getCode()) {
 
             case F4:
                 goToHome();
-                break;
-            case F5:
-                getScreen().getEventsFromSearchView();
                 break;
             case LEFT:
                 previousPage();

@@ -3,117 +3,85 @@ package engine;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.effect.*;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class HomeView extends View {
+import static engine.UserManager.User;
 
-	private Label label;
-	private Button enterButton, newUserButton;
-	private TextField textField;
-	private boolean usersExist;
+//Can't be extended
+public final class HomeView extends View {
 
-    public HomeView(String name, Screen screen) {
+    private TextField textField;
+    private PasswordField passwordField;
+    private boolean newUser;
 
-        super(name, screen);
-        
-        usersExist = User.userFileExists();
-        String text = usersExist ? "Welcome to Event Organizer - please enter your User ID" : "Welcome to Event Organizer";
-        label = new Label(text);
+    public HomeView(Screen screen) {
+
+        super(screen);
+
+        ((ButtonBar)getTop()).getButtons().clear();
+        Label label = new Label("Welcome to Event Organizer");
         label.setStyle("-fx-font: 24 arial;");
         label.setWrapText(true);
         label.setTextAlignment(TextAlignment.CENTER);
-        VBox vBox = new VBox();
         textField = new TextField();
-        textField.setOnKeyPressed(this::keyPressListener);
-        textField.setPrefWidth(500);
-        text = usersExist ? "Enter" : "Continue";
-        enterButton = new Button(text);
+        passwordField = new PasswordField();
+        Button enterButton = new Button("Enter");
         enterButton.setOnAction(event -> enter());
-        newUserButton = new Button("New User?");
-        newUserButton.setOnAction(event -> {
-            User.registerNewUser();
-            getScreen().logIn();
+        CheckBox newUserCheckBox = new CheckBox("New User?");
+        newUserCheckBox.setOnAction(event -> {
+            newUser = newUserCheckBox.isSelected();
+            if(newUser) {
+                enterButton.setText("Create account");
+            }else{
+                enterButton.setText("Log in");
+            }
         });
-        vBox.getChildren().addAll(label);
-        if(usersExist) {
-            vBox.getChildren().addAll(textField, newUserButton);
-        }
-        vBox.setSpacing(25);
-        vBox.getChildren().add(enterButton);
+        HBox userNameNodes = new HBox(14, new Label("Username:"), textField);
+        userNameNodes.setAlignment(Pos.CENTER);
+        HBox passwordNodes = new HBox(14, new Label("Password: "), passwordField);
+        passwordNodes.setAlignment(Pos.CENTER);
+        VBox vBox = new VBox(25, label, userNameNodes, passwordNodes, newUserCheckBox, enterButton);
         vBox.setAlignment(Pos.CENTER);
-        getBorderPane().setCenter(vBox);
-        getBorderPane().setBackground(new Background(new BackgroundFill(Color.LAVENDERBLUSH, CornerRadii.EMPTY, Insets.EMPTY)));
+        setCenter(vBox);
+        setBackground(new Background(new BackgroundFill(Color.LAVENDERBLUSH, CornerRadii.EMPTY, Insets.EMPTY)));
 
     }
 
     private void enter() {
 
-        if(usersExist) {
-            checkTextField();
-        }else{
-            User.registerNewUser();
-            getScreen().logIn();
-        }
-
-    }
-
-    private void checkTextField() {
-
-        String text = textField.getText();
-        if(!text.replaceAll(" ", "").equals("")) {
-            if(User.validateUserID(text)) {
-                User.logUserIn(text);
-                getScreen().logIn();
+        String username = textField.getText().replaceAll(" ", "");
+        String password = passwordField.getText().replaceAll(" ", "");
+        if(!username.equals("") && !password.equals("")) {
+            User user;
+            if(newUser) {
+                user = UserManager.registerNewUser(username, password);
             }else{
-                new Alert(Alert.AlertType.ERROR, "No User ID Found").show();
+                user = UserManager.getUser(username, password);
+            }
+            if(user != null) {
+                getScreen().setCurrentUser(user);
+                textField.setText("");
+                passwordField.setText("");
+                textField.setEffect(null);
+                passwordField.setEffect(null);
+                return;
             }
         }
-
-    }
-
-    @Override
-    public Button[] getToolBarButtons() {
-
-        return new Button[0];
-    }
-
-    @Override
-    public void keyReleaseListener(KeyEvent keyEvent) {
-
-        switch(keyEvent.getCode()) {
-
-            //Code...
-
-        }
-
-        System.out.println("Working");
+        textField.setEffect(new DropShadow(30, Color.ORANGE));
+        passwordField.setEffect(new DropShadow(30, Color.ORANGE));
 
     }
 
 	@Override
-	public void keyPressListener(KeyEvent keyEvent) {
+	public void keyPressed(KeyEvent keyEvent) {
 
-        switch(keyEvent.getCode()) {
-
-            case ENTER:
-                if(usersExist) {
-                    checkTextField();
-                }else{
-                    User.registerNewUser();
-                    getScreen().logIn();
-                }
-                break;
-            case F1:
-                Screen.shutdown();
-                break;
-
-        }
+        //...
 
 	}
 

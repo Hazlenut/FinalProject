@@ -49,3 +49,27 @@ We are building a JavaFX application that can get movie times, concert times, sp
 - Added the EventLoader class which loads a specific User's event data from a user specific text file
 
 - Updated the GUI significantly and added other minor changes
+
+12/9/2019:
+
+- Added the SpecialEvents class, which is intended to store user added events, as well as new enums types for Events
+
+- Added more links
+
+12/9/2019:
+
+- Added the UserManager class, which now contains User class the within it and loads up / saves user data
+
+- Added the Encryption class, which is a helper class designed to encrypt strings (for protecting saved user data)
+
+- Added the EventManager class, which now contains the Event class within it and handles the loading of events from URLs
+
+	- ***EventManger initializes on a separate Thread to reduce load times
+
+- Added the ViewType enum within the View class
+
+- Removed EventLibrary.java and EventLoader.java as their functions are now handled by EventManager and UserManager respectively
+
+- Made changes to some of the GUI / View classes (HomeView, EventView, SearchView, SettingsView); Users can now use a username & password
+
+- Other bug fixes
