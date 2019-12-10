@@ -16,7 +16,7 @@ public final class EventManager {
     private EventManager() {}
 
     private static boolean initialized = false;
-    private volatile static ArrayList<Event> events;
+    private static ArrayList<Event> events;
     private static LinkedList<Link> searchQueue;
 
     public static void initialize() throws IOException, IllegalStateException {
