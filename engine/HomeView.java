@@ -30,7 +30,9 @@ public final class HomeView extends View {
         label.setWrapText(true);
         label.setTextAlignment(TextAlignment.CENTER);
         textField = new TextField();
+        textField.setAlignment(Pos.CENTER);
         passwordField = new PasswordField();
+        passwordField.setAlignment(Pos.CENTER);
         Button enterButton = new Button("Enter");
         enterButton.setOnAction(event -> enter());
         CheckBox newUserCheckBox = new CheckBox("New User?");

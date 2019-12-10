@@ -11,6 +11,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.web.WebHistory;
 
 //Can't be extended
@@ -24,10 +25,8 @@ public final class SettingsView extends View {
         super(screen);
 
         setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, CornerRadii.EMPTY, Insets.EMPTY)));
-        Label userInfoLabel = new Label("Label");
-        getScreen().getUserInfo().addListener((observable, oldValue, newValue) -> {
-            userInfoLabel.setText(newValue);
-        });
+        Label userInfoLabel = new Label("   User data here");
+        userInfoLabel.setFont(Font.font("arial", 22));
         setTop(new VBox(15, getTop(), userInfoLabel));
         historyList = new ListView<>(getScreen().getSearchView().getHistory());
         historyList.getSelectionModel().getSelectedItems().addListener((ListChangeListener<WebHistory.Entry>) c -> link = historyList.getSelectionModel().getSelectedItems().get(0).getUrl());
