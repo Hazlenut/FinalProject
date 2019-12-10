@@ -1,51 +1,52 @@
 package engine;
 
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
+import java.util.ArrayList;
+
+//Base class for all Views
 public abstract class View extends BorderPane {
 
-    private Screen screen;
-    private ButtonBar buttonBar;
+    private Screen screen; //The screen which holds a given View
+    private ArrayList<Button> buttons; //Stores the buttons a View adds to the Screen's toolbar
 
+    /**
+     * @param screen The Screen instance holding this View
+     */
     protected View(Screen screen) {
 
         this.screen = screen;
-        buttonBar = new ButtonBar();
-        Button logOutButton = new Button("Log out");
-        ButtonBar.setButtonData(logOutButton, ButtonBar.ButtonData.LEFT);
-        logOutButton.setOnAction(event -> getScreen().setCurrentUser(null));
-        MenuButton viewSelector = new MenuButton("Switch to");
-        MenuItem eventViewItem = new MenuItem("Events");
-        eventViewItem.setOnAction(event -> getScreen().switchView(ViewType.EVENT_VIEW));
-        MenuItem searchViewItem = new MenuItem("Web Browser");
-        searchViewItem.setOnAction(event -> getScreen().switchView(ViewType.SEARCH_VIEW));
-        MenuItem settingViewItem = new MenuItem("Settings");
-        settingViewItem.setOnAction(event -> getScreen().switchView(ViewType.SETTINGS_VIEW));
-        viewSelector.getItems().addAll(eventViewItem, searchViewItem, settingViewItem);
-        viewSelector.setAlignment(Pos.TOP_RIGHT);
-        buttonBar.getButtons().addAll(logOutButton, viewSelector);
-        setTop(buttonBar);
+        buttons = new ArrayList<>();
 
     }
 
+    /**
+     * @return this View's Screen instance
+     */
     protected Screen getScreen() {
 
         return screen;
     }
 
-    protected ButtonBar getButtonBar() {
+    /**
+     * @return This View's Buttons (so that the Screen holding this View can add the buttons to its toolbar)
+     */
+    public ArrayList<Button> getToolbarButtons() {
 
-        return buttonBar;
+        return buttons;
     }
 
+    /**
+     * This method is abstract because each view potentially has different responses to the same KeyEvents
+     * @param keyEvent the KeyEvent passed from the Screen
+     */
     protected abstract void keyPressed(KeyEvent keyEvent);
 
+    /**
+     * This enum represents the different View
+     */
     public enum ViewType {
 
         HOME_VIEW,

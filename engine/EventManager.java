@@ -82,17 +82,7 @@ public final class EventManager {
                         events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0));
                     }
                     break;
-                case CONCERT:
-                    for(Element e : elements) {
-                        events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0));
-                    }
-                    break;
-                case SPORT:
-                    for(Element e : elements) {
-                        events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0));
-                    }
-                    break;
-                case OTHER:
+                default:
                     for(Element e : elements) {
                         events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0));
                     }

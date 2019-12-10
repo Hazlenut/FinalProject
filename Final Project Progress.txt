@@ -73,3 +73,17 @@ We are building a JavaFX application that can get movie times, concert times, sp
 - Made changes to some of the GUI / View classes (HomeView, EventView, SearchView, SettingsView); Users can now use a username & password
 
 - Other bug fixes
+
+12/10/2019:
+
+- Made changes to the View class
+
+- Moved the toolbar back to the Screen class
+
+- Minor changes to the View subclasses (HomeView, EventView, SearchView, SettingsView)
+
+- Minor changes to the EventManager class
+
+- Other minor changes / GUI improvement
+
+- Added javadoc and other comments to some of the classes
