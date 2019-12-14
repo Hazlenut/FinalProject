@@ -6,11 +6,13 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 
 //Can't be extended
-public final class EventManager {
+public final class EventManager implements Comparator<engine.EventManager.Event>{
 
     //Can't be instantiated
     private EventManager() {}
@@ -107,7 +109,16 @@ public final class EventManager {
 
         return events;
     }
-
+    public static ArrayList<Event> sortAlphabet(ArrayList<Event> events) {
+    	EventManager comp = new EventManager();
+    	System.out.println("TEST: " + events.get(0).getName());
+    	Collections.sort(events, comp);
+    	for(int i = 0; i < events.size(); i++) {
+    		System.out.println(events.get(i));
+    	}
+    	return events;
+    }
+    
     public static class Event implements Comparable<Event> {
 
         private String name;
@@ -227,7 +238,7 @@ public final class EventManager {
             this.dislikes = dislikes;
 
         }
-
+        
         public String getName() {
 
             return name;
@@ -270,5 +281,14 @@ public final class EventManager {
         }
 
     }
+
+    @Override
+	public int compare(Event o1, Event o2) {
+		// TODO Auto-generated method stub
+		System.out.println("here");
+		return o1.getName().compareTo(o2.getName());
+	}
+
+
 
 }

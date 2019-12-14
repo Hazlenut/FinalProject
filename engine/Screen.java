@@ -140,6 +140,10 @@ public final class Screen extends Scene {
         }
 
     }
+    ButtonBar getToolBar() {
+    	return toolBar;
+    }
+    
 
     public void switchView(View.ViewType viewType) {
 
