@@ -262,29 +262,9 @@ public final class EventManager implements Comparator<engine.EventManager.Event>
             return name;
         }
 
-        public void setName(String name) throws IOException, IllegalStateException {
-        Link link = searchQueue.poll();
+        public void setName(String name) {
 
-          Document html;
-            Elements elements;
-            Elements elements2;
-            String[] element = new String[20];
-            try{
-              html = Jsoup.parse(Jsoup.connect(link.getLink()).get().html());
-              elements = html.select(link.getType().getQuery());
-            }catch(IllegalArgumentException e) {
-                throw new IllegalStateException("Search Queue must contain valid links");
-            }
-              switch(link.getType()) {
-                case CONCERT:
-                  elements2 = elements.select("a");
-                  for(int i =0; i <= element.length-1; i++)
-                  {
-                    this.name = elements2.html();
-                  }
-                default:
-                  this.name = name;
-              }
+            this.name = name;
 
         }
 
