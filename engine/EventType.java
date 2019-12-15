@@ -15,13 +15,11 @@ public enum EventType {
             case MOVIE:
                 return "h3";
             case CONCERT:
-                return "h3";
+                return "h2";
             case SPORT:
-                return "h3";
-          case ART:
-            return "h3";
+                return "h4";
           case MASON_EVENTS:
-            return "href";
+            return "span";
           default:
           case OTHER:
             return "h1";

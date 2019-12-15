@@ -3,7 +3,7 @@ package engine;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
+import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,9 +27,8 @@ public final class EventManager implements Comparator<engine.EventManager.Event>
             events = new ArrayList<>();
             searchQueue = new LinkedList<>();
             searchQueue.add(new Link("https://www.amctheatres.com/movies", EventType.MOVIE));
-            searchQueue.add(new Link("https://www.stubhub.com/concert-tickets/category/1/", EventType.CONCERT));
-            searchQueue.add(new Link("https://www.stubhub.com/sports-tickets/category/28/", EventType.SPORT));
-            searchQueue.add(new Link("https://www.stubhub.com/theater-and-arts-tickets/category/174/", EventType.ART));
+            searchQueue.add(new Link("https://www.bandsintown.com/c/fairfax-va?came_from=253&sort_by_filter=Number+of+RSVPs", EventType.CONCERT));
+            searchQueue.add(new Link("https://www2.gmu.edu/today-mason", EventType.MASON_EVENTS));
             findEvents();
             initialized = true;
         }else{
@@ -62,16 +61,19 @@ public final class EventManager implements Comparator<engine.EventManager.Event>
 
     }
 
-	private static void findEvents() throws IOException, IllegalStateException {
+ private static void findEvents() throws IOException, IllegalStateException {
 
-		while(!searchQueue.isEmpty()) {
+  while(!searchQueue.isEmpty()) {
             Link link = searchQueue.poll();
             if(link == null) {
                 continue;
             }
+            
             Elements elements;
+            Document html;
             try{
-                elements = Jsoup.parse(Jsoup.connect(link.getLink()).get().html()).select(link.getType().getQuery());
+                html = Jsoup.parse(Jsoup.connect(link.getLink()).get().html());
+                elements = html.select(link.getType().getQuery());
             }catch(IllegalArgumentException e) {
                 throw new IllegalStateException("Search Queue must contain valid links");
             }
@@ -84,6 +86,22 @@ public final class EventManager implements Comparator<engine.EventManager.Event>
                         events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0));
                     }
                     break;
+                 case CONCERT:
+                    for (int i = 0; i < 4; i++) {
+                        elements.remove(elements.size()-1);
+                    }
+                    for(Element e : elements) {
+                        events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0));
+                    }
+                    break;
+              case MASON_EVENTS:
+                for(int i = 0; i < 4; i++) {
+                elements.remove(elements.size()-1);
+              }
+              for(Element e : elements) {
+                events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0));
+              }
+              break;
                 default:
                     for(Element e : elements) {
                         events.add(new Event(e.ownText(), new Date(), link.getType(), 0, 0, 0));
@@ -91,9 +109,9 @@ public final class EventManager implements Comparator<engine.EventManager.Event>
             }
         }
 
-	}
+ }
 
-	public static ArrayList<Event> getEvents() {
+ public static ArrayList<Event> getEvents() {
 
         return events;
     }
@@ -110,13 +128,13 @@ public final class EventManager implements Comparator<engine.EventManager.Event>
         return events;
     }
     public static ArrayList<Event> sortAlphabet(ArrayList<Event> events) {
-    	EventManager comp = new EventManager();
-    	System.out.println("TEST: " + events.get(0).getName());
-    	Collections.sort(events, comp);
-    	for(int i = 0; i < events.size(); i++) {
-    		System.out.println(events.get(i));
-    	}
-    	return events;
+     EventManager comp = new EventManager();
+     System.out.println("TEST: " + events.get(0).getName());
+     Collections.sort(events, comp);
+     for(int i = 0; i < events.size(); i++) {
+      System.out.println(events.get(i));
+     }
+     return events;
     }
     
     public static class Event implements Comparable<Event> {
@@ -283,11 +301,11 @@ public final class EventManager implements Comparator<engine.EventManager.Event>
     }
 
     @Override
-	public int compare(Event o1, Event o2) {
-		// TODO Auto-generated method stub
-		System.out.println("here");
-		return o1.getName().compareTo(o2.getName());
-	}
+ public int compare(Event o1, Event o2) {
+  // TODO Auto-generated method stub
+  System.out.println("here");
+  return o1.getName().compareTo(o2.getName());
+ }
 
 
 
