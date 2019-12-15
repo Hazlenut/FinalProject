@@ -1,5 +1,8 @@
 package engine;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.io.File;
 import java.util.*;
 
@@ -13,25 +16,29 @@ public final class UserManager {
     private static final int WORD_LENGTH = 32; //Maximum character size of username & password
 
     //Static Variables:
-    private static boolean initialized = false;
-    private static File directory; //Directory to store user data
+    private static boolean initialized = false, linked = false;
+    private static File userDirectory; //Directory to store user data
     private static TreeMap<String, User> users;
 
     public static void initialize(String path) throws IllegalStateException { //Only call once every time the application is run, at the very start of the program
 
         if(!initialized) {
-            directory = new File(path + "userdata");
+            userDirectory = new File(path + "userdata");
             users = new TreeMap<>();
-            if(!UserManager.directory.mkdir()) {
+            if(!UserManager.userDirectory.mkdir()) {
                 try {
-                    for(File file : UserManager.directory.listFiles()) {
+                    for(File file : UserManager.userDirectory.listFiles()) {
                         Scanner input = new Scanner(Encryption.readAndDecrypt(file));
                         User user = new User(removeExtraChars(input.nextLine()), removeExtraChars(input.nextLine()));
-                        //set other user data with remaining scanner fields
+                        ArrayList<Integer> links = new ArrayList<>();
+                        while(input.hasNextLine()) {
+                            links.add(Integer.parseInt(removeExtraChars(input.nextLine())));
+                        }
+                        user.addEventIDS(links);
                         users.put(user.getUserName(), user);
                         input.close();
                     }
-                }catch(NoSuchElementException e) {
+                }catch(NoSuchElementException | NullPointerException e) {
                     throw new IllegalStateException("Corrupted user file detected");
                 }
             }
@@ -68,24 +75,19 @@ public final class UserManager {
         return users.remove(user.getUserName());
     }
 
-    public static int numActiveUsers() {
-
-        return users.size();
-    }
-
     public static void save() throws IllegalStateException { //You must call this before exiting or user data will not be saved
 
-        File[] files = directory.listFiles();
+        File[] files = userDirectory.listFiles();
         if(files != null) {
             for(File file : files) {
                 file.delete();
             }
-        }else if(!directory.mkdir()){
+        }else if(!userDirectory.mkdir()){
             throw new IllegalStateException("Error saving to userdata");
         }
         int count = 0;
         while(!users.isEmpty()) {
-            if(!Encryption.encryptAndWrite(new File(directory.getPath() + "\\user" + (count++)), users.pollFirstEntry().getValue().getFileLines())) {
+            if(!Encryption.encryptAndWrite(new File(userDirectory.getPath() + "\\user" + (count++)), users.pollFirstEntry().getValue().getFileStrings())) {
                 throw new IllegalStateException("Error while saving");
             }
         }
@@ -98,26 +100,68 @@ public final class UserManager {
                 .replaceAll(("" + (char)164), "").replaceAll(("" + (char)165), "").replaceAll(("" + (char)166), "");
     }
 
+    public static Collection<User> usersReadOnly() {
+
+        return Collections.unmodifiableCollection(users.values());
+    }
+
+    public static boolean linkUsersToEvents() {
+
+        if(!linked) {
+            for(User user : users.values()) {
+                for(EventManager.Event event : EventManager.getEvents()) {
+                    if(user.getEventIDs().contains(event.getId())) {
+                        user.getEventsAttending().add(event);
+                    }
+                }
+            }
+            linked = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    public static int usersAttendingEvent(EventManager.Event event) {
+
+        int count = 0;
+        for(User user : users.values()) {
+            if(user.getEventsAttending().contains(event)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
     public static class User {
 
         private String userName, password;
+        private ObservableList<EventManager.Event> eventsAttending;
+        private ArrayList<Integer> links;
 
         private User(String userName, String password) {
 
             this.userName = userName;
             this.password = password;
+            eventsAttending = FXCollections.observableArrayList();
 
+        }
+
+        private void addEventIDS(ArrayList<Integer> links) {
+
+            this.links = links;
+
+        }
+
+        public ArrayList<Integer> getEventIDs() {
+
+            return links;
         }
 
         public String getUserName() {
 
             return userName;
-        }
-
-        public void setUserName(String userName) {
-
-            this.userName = userName;
-
         }
 
         public String getPassword() {
@@ -131,14 +175,30 @@ public final class UserManager {
 
         }
 
-        //Data field operations...
+        public ObservableList<EventManager.Event> getEventsAttending() {
 
-        private List<String> getFileLines() { //Add data fields here too
+            return eventsAttending;
+        }
+
+        public boolean isAttending(EventManager.Event event) {
+
+            for(EventManager.Event e : eventsAttending) {
+                if(e.equals(event)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private List<String> getFileStrings() {
 
             ArrayList<String> list = new ArrayList<>();
-            //Add in the order that you want them printed; no field should exceed WORD_LENGTH
             list.add(userName);
             list.add(password);
+            for(EventManager.Event event : eventsAttending) {
+                list.add("" + event.getId());
+            }
             for(int i = 0; i < list.size(); i++) {
                 StringBuilder stringBuilder = new StringBuilder(list.get(i));
                 for(int j = 0; j < (WORD_LENGTH - password.length()); j++) {
@@ -151,7 +211,7 @@ public final class UserManager {
         }
 
         @Override
-        public String toString() { //Change to reflect relevant data fields
+        public String toString() {
 
             return userName;
         }

@@ -1,6 +1,6 @@
 package engine;
 
-import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public abstract class View extends BorderPane {
 
     private Screen screen; //The screen which holds a given View
-    private ArrayList<Button> buttons; //Stores the buttons a View adds to the Screen's toolbar
+    private ArrayList<ButtonBase> buttons; //Stores the buttons a View adds to the Screen's toolbar
 
     /**
      * @param screen The Screen instance holding this View
@@ -33,7 +33,7 @@ public abstract class View extends BorderPane {
     /**
      * @return This View's Buttons (so that the Screen holding this View can add the buttons to its toolbar)
      */
-    public ArrayList<Button> getToolbarButtons() {
+    public ArrayList<ButtonBase> getToolbarButtons() {
 
         return buttons;
     }
