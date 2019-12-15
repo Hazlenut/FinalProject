@@ -1,6 +1,8 @@
 package engine;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -23,6 +25,9 @@ public final class Screen extends Scene {
     private SearchView searchView;
     private SettingsView settingsView;
     private User currentUser;
+    private SimpleStringProperty currentUserName;
+    private Button logOutButton;
+    private MenuButton viewSelector;
 
     /**
      * Creates a new Screen with the default Views loaded in
@@ -36,10 +41,10 @@ public final class Screen extends Scene {
         homeView = new HomeView(this);
         getBorderPane().setCenter(homeView);
         toolBar = new ButtonBar();
-        Button logOutButton = new Button("Log out");
+        logOutButton = new Button("Log out");
         ButtonBar.setButtonData(logOutButton, ButtonBar.ButtonData.LEFT);
         logOutButton.setOnAction(event -> setCurrentUser(null));
-        MenuButton viewSelector = new MenuButton("Switch to");
+        viewSelector = new MenuButton("Switch to");
         MenuItem eventViewItem = new MenuItem("Events");
         eventViewItem.setOnAction(event -> switchView(View.ViewType.EVENT_VIEW));
         MenuItem searchViewItem = new MenuItem("Web Browser");
@@ -50,6 +55,7 @@ public final class Screen extends Scene {
         ButtonBar.setButtonData(viewSelector, ButtonBar.ButtonData.RIGHT);
         toolBar.getButtons().addAll(logOutButton, viewSelector);
         currentUser = null;
+        currentUserName = new SimpleStringProperty();
         initializeViews(false);
         setOnKeyPressed(this::keyPressed);
 
@@ -87,27 +93,11 @@ public final class Screen extends Scene {
     }
 
     /**
-     * @return This Screen's EventView
-     */
-    protected EventView getEventView() {
-
-        return eventView;
-    }
-
-    /**
      * @return This Screen's SearchView
      */
     public SearchView getSearchView() {
 
         return searchView;
-    }
-
-    /**
-     * @return This Screen's SettingsView
-     */
-    public SettingsView getSettingsView() {
-
-        return settingsView;
     }
 
     /**
@@ -126,24 +116,33 @@ public final class Screen extends Scene {
         return currentUser;
     }
 
-    public void setCurrentUser(User currentUser) {
+    /**
+     * @return The userName of the user currently logged in
+     */
+    public StringProperty getCurrentUserName() {
 
+        return currentUserName;
+    }
+
+    public User setCurrentUser(User currentUser) {
+
+        User user = this.currentUser;
         this.currentUser = currentUser;
         if(currentUser == null) {
             getBorderPane().setCenter(homeView);
             getBorderPane().setTop(null);
+            toolBar.getButtons().clear();
+            toolBar.getButtons().addAll(logOutButton, viewSelector);
             initializeViews(true);
         }else{
             getBorderPane().setCenter(null);
             switchView(DEFAULT_VIEW_ON_LOGIN);
             getBorderPane().setTop(toolBar);
+            currentUserName.set(currentUser.getUserName());
         }
 
+        return user;
     }
-    ButtonBar getToolBar() {
-    	return toolBar;
-    }
-    
 
     public void switchView(View.ViewType viewType) {
 

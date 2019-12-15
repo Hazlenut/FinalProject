@@ -32,9 +32,10 @@ public final class SearchView extends View {
         button1.setOnAction(event -> previousPage());
         Button button2 = new Button("Next");
         button2.setOnAction(event -> nextPage());
-        Button button3 = new Button("Google");
+        Button button3 = new Button("Home Page");
         button3.setOnAction(event -> goToHome());
-        getToolbarButtons().add(button1); //Add those buttons to the Button ArrayList
+        //Add those buttons to the Button ArrayList:
+        getToolbarButtons().add(button1);
         getToolbarButtons().add(button2);
         getToolbarButtons().add(button3);
 

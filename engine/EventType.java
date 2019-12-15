@@ -6,7 +6,7 @@ public enum EventType {
     CONCERT,
     SPORT,
     ART,
-    MASON_EVENTS,
+    MASON_EVENT,
     OTHER;
 
     public String getQuery() {
@@ -18,11 +18,13 @@ public enum EventType {
                 return "h2";
             case SPORT:
                 return "h4";
-          case MASON_EVENTS:
-            return "span";
-          default:
-          case OTHER:
-            return "h1";
+            case ART:
+                return "h3";
+            case MASON_EVENT:
+                return "span";
+            default:
+            case OTHER:
+                return "h1";
         }
 
     }

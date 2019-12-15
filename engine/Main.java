@@ -5,8 +5,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class Main extends Application {
 
     public static void main(String[] args) {
@@ -20,16 +18,11 @@ public class Main extends Application {
 
         if(getParameters().getUnnamed().size() > 0) {
             UserManager.initialize(getParameters().getRaw().get(0));
+            EventManager.initialize(getParameters().getRaw().get(0));
         }else{
             UserManager.initialize("");
+            EventManager.initialize("");
         }
-        new Thread(() -> {
-            try {
-                EventManager.initialize();
-            }catch(IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
         Rectangle2D screenSize = javafx.stage.Screen.getPrimary().getVisualBounds();
         Screen screen = new Screen((0.37 * screenSize.getWidth()), (0.45 * screenSize.getHeight()));
         primaryStage.setScene(screen);
@@ -39,9 +32,13 @@ public class Main extends Application {
 
     }
 
+    /**
+     * This method saves the user & event data before shutting down the program
+     */
     @Override
     public void stop() throws Exception {
 
+        EventManager.save();
         UserManager.save();
         super.stop();
 

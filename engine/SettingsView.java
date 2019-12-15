@@ -2,6 +2,7 @@ package engine;
 
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
@@ -9,7 +10,10 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.web.WebHistory;
+
+import java.util.Optional;
 
 //Can't be extended
 public final class SettingsView extends View {
@@ -42,6 +46,25 @@ public final class SettingsView extends View {
             }
         });
         setCenter(goToLinkButton);
+        Label currentUser = new Label();
+        currentUser.setPadding(new Insets(25, 100, 0, 100));
+        currentUser.setAlignment(Pos.CENTER);
+        currentUser.setFont(new Font(30));
+        getScreen().getCurrentUserName().addListener((observable, oldValue, newValue) -> {
+            if(newValue != null) {
+                currentUser.setText("Current User: " + newValue);
+            }
+        });
+        setTop(currentUser);
+
+        Button deleteUserButton = new Button("Delete account");
+        deleteUserButton.setOnAction(event -> {
+            Optional<ButtonType> result = new Alert(Alert.AlertType.WARNING, "Are you sure you want to delete your account?", ButtonType.YES, ButtonType.NO).showAndWait();
+            if(result.get() == ButtonType.YES) {
+                UserManager.removeUser(getScreen().setCurrentUser(null));
+            }
+        });
+        getToolbarButtons().add(deleteUserButton);
 
     }
 
@@ -50,10 +73,6 @@ public final class SettingsView extends View {
      * @param keyEvent the KeyEvent passed from the Screen
      */
     @Override
-    public void keyPressed(KeyEvent keyEvent) {
-
-        //...
-
-    }
+    public void keyPressed(KeyEvent keyEvent) { /* UNUSED */ }
 
 }
