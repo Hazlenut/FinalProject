@@ -45,6 +45,7 @@ public final class EventManager {
             searchQueue = new LinkedList<>();
             searchQueue.add(new Link("https://www.amctheatres.com/movies", EventType.MOVIE));
             searchQueue.add(new Link("https://www.bandsintown.com/c/fairfax-va?came_from=253&sort_by_filter=Number+of+RSVPs", EventType.CONCERT));
+            searchQueue.add(new Link("https://washingtondc.eventful.com/events/categories/sports", EventType.SPORT));
             searchQueue.add(new Link("https://www2.gmu.edu/today-mason", EventType.MASON_EVENT));
             new Thread(() -> {
                 try {
@@ -101,17 +102,7 @@ public final class EventManager {
                     for (int i = 0; i < 4; i++) {
                         elements.remove(elements.size()-1);
                     }
-                    break;
-                case CONCERT:
-                    for (int i = 0; i < 4; i++) {
-                        elements.remove(elements.size()-1);
-                    }
-                    break;
-                case MASON_EVENT:
-                    for(int i = 0; i < 4; i++) {
-                        elements.remove(elements.size()-1);
-                    }
-                    break;
+                    break; 
             }
             for(Element e : elements) {
                 events.add(new Event(e.ownText(), link.getLink(), LocalDate.now(), link.getType()));
