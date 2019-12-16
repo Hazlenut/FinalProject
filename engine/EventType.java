@@ -2,6 +2,7 @@ package engine;
 
 public enum EventType {
 
+    //These enums are used to represent different events that are gathered from websites
     MOVIE,
     CONCERT,
     SPORT,
@@ -9,6 +10,9 @@ public enum EventType {
     MASON_EVENT,
     OTHER;
 
+    /**
+     * @return the cssQuery that each EventType requires in order to be properly parsed by Jsoup
+     */
     public String getQuery() {
 
         switch(this) {

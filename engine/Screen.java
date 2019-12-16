@@ -38,6 +38,8 @@ public final class Screen extends Scene {
 
         super(new BorderPane(), width, height);
 
+        //This code adds the GUI objects to the screen:
+
         homeView = new HomeView(this);
         getBorderPane().setCenter(homeView);
         toolBar = new ButtonBar();
@@ -55,8 +57,13 @@ public final class Screen extends Scene {
         ButtonBar.setButtonData(viewSelector, ButtonBar.ButtonData.RIGHT);
         toolBar.getButtons().addAll(logOutButton, viewSelector);
         currentUser = null;
+
+        //Add an observable string so that the settingsView can change it's label to the current user's username:
         currentUserName = new SimpleStringProperty();
+
+        //Initialize Views:
         initializeViews(false);
+
         setOnKeyPressed(this::keyPressed);
 
     }
@@ -124,6 +131,11 @@ public final class Screen extends Scene {
         return currentUserName;
     }
 
+    /**
+     * This method sets the current user of the system
+     * @param currentUser the user to be set as the current user
+     * @return the previous currentUser
+     */
     public User setCurrentUser(User currentUser) {
 
         User user = this.currentUser;
@@ -144,6 +156,10 @@ public final class Screen extends Scene {
         return user;
     }
 
+    /**
+     * This method switches the current view to the specified view
+     * @param viewType the ViewType to switch to
+     */
     public void switchView(View.ViewType viewType) {
 
         if(!(getCurrentView() instanceof HomeView)) {
@@ -168,6 +184,9 @@ public final class Screen extends Scene {
 
     }
 
+    /**
+     * Default keyListener for the Screen object; it will pass on the keyEvent to the currentView if the Screen doesn't consume the KeyEvent
+     */
     private void keyPressed(KeyEvent keyEvent) {
 
         switch(keyEvent.getCode()) {

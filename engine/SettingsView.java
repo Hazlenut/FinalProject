@@ -57,6 +57,8 @@ public final class SettingsView extends View {
         });
         setTop(currentUser);
 
+        //This code adds the ability for a user to delete their account:
+
         Button deleteUserButton = new Button("Delete account");
         deleteUserButton.setOnAction(event -> {
             Optional<ButtonType> result = new Alert(Alert.AlertType.WARNING, "Are you sure you want to delete your account?", ButtonType.YES, ButtonType.NO).showAndWait();

@@ -13,6 +13,9 @@ public class Main extends Application {
 
     }
 
+    /**
+     * This method starts the program, and initializes the GUI , user system, and events
+     */
     @Override
     public void start(Stage primaryStage) {
 

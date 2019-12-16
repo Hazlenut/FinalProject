@@ -1,0 +1,13 @@
+Changes we made from the presentation comments:
+
+we made major changes to the eventview
+
+	- most importantly, there is now a listview showing all the events
+	- Changed around the class structure and changed the file structure
+
+		-previously, we used attribute.txt, and some user.txt files;
+		now we use an eventdata directory and a userdata directory
+
+	- users now have usernames and passwords instead of only userids
+	- we also improved the GUI and user log in system and added a bunch of other minor improvements
+	- cleaned up the code a bit

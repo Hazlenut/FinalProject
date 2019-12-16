@@ -26,14 +26,20 @@ public final class EventView extends View {
 
         currentlySelectedEvent = null;
 
+        //Add a ListView to display events:
+
         ListView<EventManager.Event> listView = new ListView<>(FXCollections.observableArrayList(EventManager.getEvents())); //Creates a ListView which displays the Events stored in EventManager
         EventManager.getEvents().addListener((SetChangeListener<EventManager.Event>) change -> listView.setItems(FXCollections.observableArrayList(EventManager.getEvents())));
         setBottom(listView);
+
+        //Add a DatePicker to sort events by date:
 
         DatePicker datePicker = new DatePicker();
         datePicker.setPadding(new Insets(10, 10, 10, 10));
         datePicker.setShowWeekNumbers(true);
         datePicker.setOnAction(event -> listView.setItems(EventManager.getEventsSorted(datePicker.getValue())));
+
+        //Add a HyperLink so that a user can view the Event on the internet:
 
         Hyperlink link = new Hyperlink("View online");
         link.setOnAction(event -> {
@@ -61,6 +67,9 @@ public final class EventView extends View {
             listView.getSelectionModel().clearSelection();
             listView.getSelectionModel().select(i);
         });
+
+        //This code adds functionality for allowing the user to both select certain events and mark whether or not they are attending:
+
         Label attendanceLabel = new Label("0 users are attending this event");
         listView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<EventManager.Event>) c -> {
             try {
@@ -84,6 +93,8 @@ public final class EventView extends View {
             }
         });
         setCenter(hBox);
+
+        //This code adds a menu with different selections to sort the event list:
 
         MenuButton viewSelector = new MenuButton("Filter");
 

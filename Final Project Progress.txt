@@ -93,3 +93,9 @@ We are building a JavaFX application that can get movie times, concert times, sp
 - More GUI improvements
 
 - Added code to EventManager.java & UserManager.java that allows users to save events that thye are attending
+
+12/15/2019:
+
+- Added TitlesAndDates.java to assist EventManager in loading certain events
+
+- removed SpecialEvents.java
